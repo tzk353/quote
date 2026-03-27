@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>機場接送報價系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f1117; --s2:#1e2335; --s3:#252b3d;
+  --border:#2e3450; --bl:#3a4168;
+  --gold:#c9a84c; --gdim:#8a6e30; --gglow:rgba(201,168,76,.15);
+  --text:#e8eaf0; --dim:#8b93b0; --muted:#4e5672;
+  --green:#4caf7d; --red:#e05c5c; --blue:#5b8dee;
+  --r:10px;
+  --fb:'Noto Sans TC',sans-serif;
+  --fs:'Noto Serif TC',serif;
+  --fm:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;font-size:14px;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 20%,rgba(201,168,76,.04) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 80%,rgba(91,141,238,.04) 0%,transparent 60%)}
+.app{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:2rem 1.2rem 5rem}
+
+/* TOP */
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.4rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:.8rem}
+.logo-icon{font-size:2rem}
+.logo-text{font-family:var(--fs);font-size:1.25rem;color:var(--gold)}
+.logo-sub{font-family:var(--fm);font-size:.62rem;letter-spacing:.22em;color:var(--muted);margin-top:2px}
+.mode-tabs{display:flex;gap:.4rem}
+.mode-btn{padding:.45rem 1rem;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--dim);font-family:var(--fm);font-size:.72rem;letter-spacing:.1em;cursor:pointer;transition:all .18s}
+.mode-btn.active{background:var(--gold);border-color:var(--gold);color:#0f1117;font-weight:500}
+.mode-btn:not(.active):hover{border-color:var(--gdim);color:var(--gold)}
+
+/* PANEL */
+.panel{display:none;animation:fadeUp .25s ease}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* SECTION */
+.section{margin-bottom:2rem}
+.sh{display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem}
+.sh::after{content:'';flex:1;height:1px;background:var(--border);margin-left:.4rem}
+.slabel{font-family:var(--fm);font-size:.68rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem 1.3rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem 1.3rem}
+.span2{grid-column:span 2}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}.span2{grid-column:span 1}.mode-btn{font-size:.65rem;padding:.4rem .7rem}}
+@media(max-width:800px){.g3{grid-template-columns:1fr 1fr}}
+
+/* FIELD */
+.field{display:flex;flex-direction:column;gap:.35rem}
+.field label{font-family:var(--fm);font-size:.67rem;letter-spacing:.12em;color:var(--dim)}
+.field input,.field select,.field textarea{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.58rem .85rem;border-radius:7px;font-family:var(--fb);font-size:.88rem;transition:border-color .15s,box-shadow .15s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gglow)}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b93b0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center;padding-right:2.2rem}
+.field textarea{resize:vertical;min-height:62px}
+.field input[type=number]{-moz-appearance:textfield}
+.field input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* TYPE */
+.type-selector{display:flex;gap:.8rem;margin-bottom:2rem}
+.type-card{flex:1;padding:1.1rem 1.3rem;border-radius:var(--r);border:2px solid var(--border);background:var(--s2);cursor:pointer;transition:all .2s;text-align:center}
+.type-card:hover{border-color:var(--gdim);transform:translateY(-2px)}
+.type-card.selected{border-color:var(--gold);background:var(--gglow)}
+.type-card .ti{font-size:2rem;margin-bottom:.4rem}
+.type-card .tn{font-size:.95rem;font-weight:600}
+.type-card .td2{font-size:.75rem;color:var(--dim);margin-top:.2rem}
+
+/* CARS */
+.car-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+@media(max-width:700px){.car-grid{grid-template-columns:1fr 1fr}}
+.car-card{border:1.5px solid var(--border);border-radius:9px;background:var(--s2);padding:.9rem 1rem 1rem;cursor:pointer;transition:all .2s;position:relative}
+.car-card:hover{border-color:var(--gdim);transform:translateY(-2px)}
+.car-card.selected{border-color:var(--gold);background:var(--gglow)}
+.cpt{position:absolute;top:.5rem;right:.5rem;background:var(--s3);border:1px solid var(--bl);border-radius:5px;padding:.15rem .45rem;font-family:var(--fm);font-size:.68rem;color:var(--gold);display:flex;align-items:center;gap:2px;transition:all .2s}
+.car-card.selected .cpt{background:var(--gold);color:#0f1117;border-color:var(--gold)}
+.cpi{font-family:var(--fm);font-size:.68rem;background:transparent;border:none;color:inherit;width:52px;text-align:right;padding:0;cursor:text}
+.cpi:focus{outline:none}
+.car-icon{font-size:1.6rem;margin-bottom:.3rem}
+.car-name{font-size:.88rem;font-weight:600}
+.car-name-input{font-size:.88rem;font-weight:600;background:transparent;border:none;border-bottom:1px dashed var(--gdim);color:var(--text);width:100%;padding:0;margin-top:.15rem;font-family:var(--fb);text-align:center;cursor:text}
+.car-name-input:focus{outline:none;border-bottom-color:var(--gold)}
+.car-seats{font-size:.72rem;color:var(--dim);font-family:var(--fm)}
+
+/* EXTRAS */
+.edit-hint{font-size:.72rem;color:var(--muted);font-family:var(--fm);margin-bottom:.5rem}
+.extras-list{display:flex;flex-direction:column;gap:.5rem}
+.extra-item{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--s2);cursor:pointer;transition:all .15s}
+.extra-item:hover{border-color:var(--gdim)}
+.extra-item.selected{border-color:var(--gold);background:var(--gglow)}
+.extra-left{display:flex;align-items:center;gap:.7rem}
+.extra-icon{font-size:1.1rem}
+.extra-name{font-size:.85rem;font-weight:500}
+.extra-desc{font-size:.72rem;color:var(--dim)}
+.extra-price{display:flex;align-items:center;gap:3px;flex-shrink:0;margin-left:.5rem}
+.epp{font-family:var(--fm);font-size:.8rem;color:var(--gold)}
+.epi{font-family:var(--fm);font-size:.8rem;color:var(--gold);background:transparent;border:none;border-bottom:1px dashed var(--gdim);width:62px;text-align:right;padding:0 2px;cursor:text}
+.epi:focus{outline:none;border-bottom-color:var(--gold)}
+.check-box{width:19px;height:19px;border-radius:5px;flex-shrink:0;border:1.5px solid var(--bl);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.extra-item.selected .check-box{background:var(--gold);border-color:var(--gold)}
+.check-box::after{content:'✓';font-size:.7rem;color:#0f1117;opacity:0;transition:opacity .1s;font-weight:700}
+.extra-item.selected .check-box::after{opacity:1}
+
+/* STAMP UPLOAD */
+.stamp-upload-area{border:2px dashed var(--border);border-radius:9px;padding:1.2rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--s2)}
+.stamp-upload-area:hover{border-color:var(--gdim)}
+.stamp-upload-area input[type=file]{display:none}
+.stamp-preview-wrap{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem}
+.stamp-preview-item{position:relative;display:inline-block}
+.stamp-preview-item img{width:90px;height:90px;object-fit:contain;border-radius:6px;border:1px solid var(--border);background:#fff;display:block}
+.stamp-remove{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.stamp-hint{font-size:.72rem;color:var(--muted);margin-top:.3rem}
+
+/* PRICE */
+.price-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.5rem}
+.price-rows{display:flex;flex-direction:column;gap:.48rem}
+.price-row{display:flex;justify-content:space-between;align-items:center}
+.price-row .label{font-size:.84rem;color:var(--dim)}
+.price-row .val{font-family:var(--fm);font-size:.85rem;color:var(--text)}
+.pdiv{height:1px;background:var(--border);margin:.8rem 0}
+.ptotal{display:flex;justify-content:space-between;align-items:center}
+.ptotal .label{font-size:1rem;font-weight:600}
+.ptotal .val{font-family:var(--fm);font-size:1.5rem;color:var(--gold);font-weight:500}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:.7rem;margin-top:2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;border:none;font-family:var(--fb);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .18s}
+.btn-primary{background:var(--gold);color:#0f1117}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--dim)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-green{background:var(--green);color:#fff}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-purple{background:#7c5cbf;color:#fff}
+
+/* PRINT ACTIONS */
+.print-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.8rem}
+
+/* ── CUSTOMER DOC ── */
+.quote-doc{background:#fff;color:#1a1a1a;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 50px rgba(0,0,0,.5);font-family:var(--fb);margin-bottom:1.8rem}
+.qh{background:#0d1020;padding:1.6rem 2rem;display:flex;justify-content:space-between;align-items:flex-start}
+.qbn{font-family:var(--fs);font-size:1.4rem;color:#c9a84c}
+.qbs{font-family:var(--fm);font-size:.62rem;letter-spacing:.22em;color:#556;margin-top:3px}
+.qmeta{text-align:right;font-family:var(--fm);font-size:.72rem;color:#777}
+.qnum{font-size:1.05rem;color:#c9a84c;display:block;margin-bottom:.3rem}
+.qbadge{display:inline-block;padding:.22rem .7rem;border-radius:20px;font-family:var(--fm);font-size:.65rem;letter-spacing:.08em;margin-top:.4rem}
+.qbadge.airport{background:rgba(91,141,238,.15);color:#5b8dee;border:1px solid rgba(91,141,238,.35)}
+.qbadge.charter{background:rgba(76,175,125,.15);color:#2d8a5e;border:1px solid rgba(76,175,125,.35)}
+.qbody{padding:1.8rem 2rem}
+.qig{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+@media(max-width:500px){.qig{grid-template-columns:1fr}}
+.qib{background:#f6f8fb;border-radius:9px;padding:.9rem 1.1rem;border:1px solid #eaecf0}
+.qit{font-family:var(--fm);font-size:.62rem;letter-spacing:.18em;color:#aaa;text-transform:uppercase;margin-bottom:.55rem}
+.qir{display:flex;gap:.5rem;margin-bottom:.3rem;font-size:.82rem}
+.qir .k{color:#999;min-width:70px;flex-shrink:0}
+.qir .v{color:#222;font-weight:500}
+.qtbl{width:100%;border-collapse:collapse;margin-bottom:1.3rem;font-size:.84rem}
+.qtbl th{background:#f0f3f8;padding:.55rem .9rem;text-align:left;font-weight:600;color:#666;border-bottom:2px solid #e2e6ef;font-family:var(--fm);font-size:.66rem;letter-spacing:.12em}
+.qtbl td{padding:.55rem .9rem;border-bottom:1px solid #f0f0f0;color:#333}
+.qtbl tr:last-child td{border-bottom:none}
+.tdp{font-family:var(--fm);color:#9a6f10 !important;text-align:right !important}
+.qtrow{display:flex;justify-content:flex-end;align-items:center;gap:2rem;padding:.9rem 1.1rem;background:#fdf8ee;border-radius:9px;margin-bottom:1.2rem;border:1px solid #e8d9a8}
+.qtl{font-size:.95rem;font-weight:600;color:#444}
+.qtv{font-family:var(--fm);font-size:1.55rem;color:#b8870a;font-weight:700}
+.qnote{background:#fffbf0;border-left:3px solid #c9a84c;padding:.7rem 1rem;border-radius:0 7px 7px 0;font-size:.82rem;color:#555;margin-bottom:.9rem}
+.qstamps{display:flex;gap:1.2rem;justify-content:flex-end;align-items:flex-end;flex-wrap:wrap;padding:0}
+.qstamps:not(:empty){padding:.8rem 0 .4rem}
+.qstamps img{width:120px;height:120px;object-fit:contain;opacity:.9}
+.stamp-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center}
+.stamp-wrap img{object-fit:contain;opacity:.9}
+.stamp-label-text{font-size:.72rem;color:#888;font-family:var(--fm);letter-spacing:.08em;text-align:center;width:100%;flex-shrink:0}.qfoot{background:#f5f7fb;padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;color:#aaa;font-family:var(--fm);border-top:1px solid #e8eaf0}
+
+/* ── DRIVER DOC ── */
+.driver-doc{background:#f0f2f5;color:#1a1a2e;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 50px rgba(0,0,0,.5);font-family:var(--fb)}
+.dhdr{background:linear-gradient(135deg,#c9a84c,#a07828);padding:1.1rem 1.8rem;display:flex;justify-content:space-between;align-items:center}
+.dht{font-family:var(--fs);font-size:1.15rem;color:#0d1020;font-weight:700}
+.dhs{font-family:var(--fm);font-size:.6rem;color:rgba(13,16,32,.65);margin-top:1px;letter-spacing:.15em}
+.dhb{font-family:var(--fm);font-size:.82rem;background:rgba(13,16,32,.3);color:#0d1020;padding:.3rem .75rem;border-radius:6px;font-weight:600}
+.dbody{padding:1.5rem 1.8rem 0 1.8rem}
+.dhi{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.4rem}
+@media(max-width:480px){.dhi{grid-template-columns:1fr}}
+.dhb2{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1);border-radius:9px;padding:.9rem 1.1rem}
+.dhl{font-family:var(--fm);font-size:.6rem;letter-spacing:.18em;color:#9a6f10;text-transform:uppercase;margin-bottom:.3rem}
+.dhv{font-size:1.05rem;font-weight:700;color:#1a1a2e}
+.dhsub{font-size:.76rem;color:#666;margin-top:2px}
+.ds{margin-bottom:1.1rem}
+.dst{font-family:var(--fm);font-size:.75rem;letter-spacing:.18em;color:#9a6f10;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid rgba(0,0,0,.1)}
+.dr{display:flex;gap:.6rem;margin-bottom:.3rem;font-size:.84rem}
+.dr .dk{color:#888;min-width:82px;flex-shrink:0}
+.dr .dv{color:#1a1a2e;font-weight:500;word-break:break-all}
+.dsp{background:rgba(154,111,16,.08);border:1px solid rgba(154,111,16,.25);border-radius:7px;padding:.7rem 1rem;font-size:.83rem;color:#7a5500;margin-top:.6rem}
+.dstamps{display:flex;gap:1.2rem;justify-content:flex-end;align-items:flex-end;flex-wrap:wrap;padding:0}
+.dstamps:not(:empty){padding:.8rem 1.8rem 1.2rem}
+.dstamps img{width:110px;height:110px;object-fit:contain;opacity:.9}
+.dstamps .stamp-wrap img{width:110px;height:110px}
+.dstamps .stamp-label-text{color:#666}
+
+/* ── SIGNATURE ── */
+.sig-section{border-top:2px dashed #e0e4ef;padding:1.1rem 0 .4rem;margin-top:.8rem}
+.sig-title{font-family:var(--fm);font-size:.68rem;letter-spacing:.18em;color:#888;text-transform:uppercase;margin-bottom:.8rem}
+.sig-row{display:flex;gap:1.2rem;align-items:flex-start;flex-wrap:wrap}
+.sig-box{flex:1;min-width:200px}
+#sig-canvas{border:1.5px dashed #bbb;border-radius:8px;background:#f8f9fc;cursor:crosshair;display:block;width:100%;touch-action:none}
+.sig-actions{display:flex;align-items:center;gap:.6rem;margin-top:.5rem;flex-wrap:wrap}
+.sig-btn{border-radius:6px;padding:.28rem .75rem;font-size:.75rem;cursor:pointer;font-family:var(--fm);border:1px solid #ddd;transition:all .15s}
+.sig-btn-clear{background:#fff;color:#888}.sig-btn-clear:hover{border-color:#aaa;color:#444}
+.sig-btn-save{background:#2c4a3e;color:#fff;border-color:#2c4a3e}.sig-btn-save:hover{background:#1e3329}
+.sig-hint{font-size:.7rem;color:#ccc;font-family:var(--fm);margin-left:auto}
+.sig-meta{display:flex;flex-direction:column;gap:.85rem;min-width:150px;flex:0 0 160px}
+.sig-meta-item{display:flex;flex-direction:column;gap:.3rem}
+.sig-meta-label{font-size:.72rem;color:#999;font-family:var(--fm)}
+.sig-date-input{border:none;border-bottom:1.5px solid #ccc;background:transparent;font-size:.85rem;color:#333;padding:.2rem 0;font-family:var(--fb);width:100%}
+.sig-date-input:focus{outline:none;border-bottom-color:#888}
+.sig-meta-line{height:1px;background:#ddd;width:100%;margin-top:.4rem}
+.sig-confirm-text{font-size:.72rem;color:#aaa;line-height:1.5;margin-top:.3rem}
+@media print{
+  .sig-btn-clear,.sig-hint{display:none !important}
+  .sig-btn-save{display:none !important}
+  #sig-canvas{border:1.5px dashed #bbb !important;background:#f8f9fc !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media print{
+  body{background:#fff !important}
+  body::before{display:none}
+  .app{padding:0 !important;max-width:none !important}
+  .top-bar,.mode-tabs,.btn-row,.print-actions,#form-panel{display:none !important}
+  #preview-panel{display:block !important}
+  .quote-doc{box-shadow:none !important;border:1px solid #ddd;margin-bottom:3rem}
+  .driver-doc{box-shadow:none !important;border:1px solid #ccc;background:#f0f2f5 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .dhdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="top-bar">
+    <div class="logo">
+      <div class="logo-icon">&#9992;</div>
+      <div>
+        <div class="logo-text">機場接送報價系統</div>
+        <div class="logo-sub">TRANSFER QUOTE SYSTEM</div>
+      </div>
+    </div>
+    <div class="mode-tabs">
+      <button class="mode-btn active" onclick="showPanel('form')">&#128221; 填寫報價</button>
+      <button class="mode-btn" onclick="showPanel('preview')">&#128065; 預覽列印</button>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div id="form-panel" class="panel active">
+
+    <div class="type-selector">
+      <div class="type-card selected" id="type-airport" onclick="selectType('airport')">
+        <div class="ti">&#9992;&#65039;</div>
+        <div class="tn">機場接送</div>
+        <div class="td2">接機 / 送機 / 來回</div>
+      </div>
+      <div class="type-card" id="type-charter" onclick="selectType('charter')">
+        <div class="ti">&#128663;</div>
+        <div class="tn">包 車</div>
+        <div class="td2">半日 / 全日 / 多日</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#127970;</span><span class="slabel">公司 / 品牌資訊</span></div>
+      <div class="g3">
+        <div class="field"><label>公司名稱</label><input id="f-company" type="text" placeholder="XX 旅遊交通有限公司"></div>
+        <div class="field"><label>聯絡電話</label><input id="f-tel" type="text" placeholder="0912-345-678"></div>
+        <div class="field"><label>LINE / 通訊帳號</label><input id="f-line" type="text" placeholder="@lineid"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#128100;</span><span class="slabel">客戶資訊</span></div>
+      <div class="g3">
+        <div class="field"><label>客戶姓名</label><input id="f-name" type="text" placeholder="王小明"></div>
+        <div class="field"><label>客戶電話</label><input id="f-ctel" type="text" placeholder="0900-000-000"></div>
+        <div class="field"><label>乘客人數</label><input id="f-pax" type="number" min="1" max="50" placeholder="4"></div>
+      </div>
+    </div>
+
+    <div id="airport-fields">
+      <div class="section">
+        <div class="sh"><span>&#128205;</span><span class="slabel">行程資訊</span></div>
+        <div class="g2">
+          <div class="field"><label>服務方向</label>
+            <select id="f-direction" onchange="toggleCustomDirection(this.value)">
+              <option value="接機">接機（機場 → 目的地）</option>
+              <option value="送機">送機（出發地 → 機場）</option>
+              <option value="來回接送">來回接送</option>
+              <option value="__custom__">✏️ 自訂接送…</option>
+            </select>
+            <input type="text" id="f-direction-custom" placeholder="請輸入自訂接送說明" style="display:none;margin-top:.4rem">
+          </div>
+          <div class="field" id="airport-field"><label>機場</label>
+            <select id="f-airport">
+              <option value="桃園國際機場（TPE）">桃園國際機場（TPE）</option>
+              <option value="松山機場（TSA）">松山機場（TSA）</option>
+              <option value="高雄國際機場（KHH）">高雄國際機場（KHH）</option>
+              <option value="台中清泉崗機場（RMQ）">台中清泉崗機場（RMQ）</option>
+            </select>
+          </div>
+          <div class="field"><label>航班號碼</label><input id="f-flight" type="text" placeholder="CI123 / BR456"></div>
+          <div class="field"><label>目的地 / 飯店地址</label><input id="f-dest" type="text" placeholder="台北市信義區 XX 飯店"></div>
+          <div class="field" id="custom-route-field" style="display:none"><label>行程內容</label><textarea id="f-custom-route" placeholder="例：台北車站 → 清境農場 → 台中火車站"></textarea></div>
+          <div class="field"><label>服務日期</label><input id="f-date" type="date"></div>
+          <div class="field"><label>時間（落地 / 集合）</label>
+            <input id="f-time" list="time-list" placeholder="00:00" autocomplete="off">
+            <datalist id="time-list"></datalist>
+          </div>
+          <div class="field"><label>上車時間</label>
+            <input id="f-pickup-time" list="time-list" placeholder="00:00" autocomplete="off">
+          </div>
+          <div class="field"><label>下車時間</label>
+            <input id="f-dropoff-time" list="time-list" placeholder="00:00" autocomplete="off">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="charter-fields" style="display:none">
+      <div class="section">
+        <div class="sh"><span>&#128506;&#65039;</span><span class="slabel">包車行程</span></div>
+        <div class="g2">
+          <div class="field"><label>包車類型</label>
+            <select id="f-charter-type" onchange="toggleCustomCharter(this.value)">
+              <option value="半日包車（4小時）">半日包車（4小時）</option>
+              <option value="全日包車（8小時）">全日包車（8小時）</option>
+              <option value="多日包車">多日包車</option>
+              <option value="__custom__">✏️ 自訂行程…</option>
+            </select>
+            <input type="text" id="f-charter-custom" placeholder="請輸入自訂行程名稱" style="display:none;margin-top:.4rem">
+          </div>
+          <div class="field"><label>服務日期</label><input id="f-charter-date" type="date"></div>
+          <div class="field"><label>出發時間</label>
+            <input id="f-charter-time" list="time-list" placeholder="00:00" autocomplete="off">
+          </div>
+          <div class="field"><label>上車時間</label>
+            <input id="f-charter-pickup" list="time-list" placeholder="00:00" autocomplete="off">
+          </div>
+          <div class="field"><label>下車時間</label>
+            <input id="f-charter-dropoff" list="time-list" placeholder="00:00" autocomplete="off">
+          </div>
+          <div class="field"><label>出發地點</label><input id="f-charter-from" type="text" placeholder="台北車站 / 飯店名稱"></div>
+          <div class="field span2"><label>行程規劃 / 景點路線</label><textarea id="f-charter-route" placeholder="例：清境農場 → 合歡山 → 廬山溫泉"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#128665;</span><span class="slabel">車型選擇</span></div>
+      <div class="edit-hint">✏️ 點擊車型名稱可修改名稱；點擊右上角金額可修改報價（機場 / 包車分開儲存）</div>
+      <div class="car-grid" id="car-grid"></div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#11088;</span><span class="slabel">加購服務（可多選）</span></div>
+      <div class="edit-hint">✏️ 點擊右側金額可修改價格</div>
+      <div class="extras-list" id="extras-list"></div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#128274;</span><span class="slabel">公司章 / 負責人章 / 統編章</span></div>
+      <div class="g3">
+        <div>
+          <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-company').click()">
+            <input type="file" id="inp-stamp-company" accept="image/*" onchange="loadStamp('company',this)">
+            <div style="font-size:1.5rem">&#127970;</div>
+            <div style="font-size:.82rem;color:var(--dim);margin-top:.3rem">公司章</div>
+            <div class="stamp-hint">PNG / JPG 透明背景佳</div>
+          </div>
+          <div class="stamp-preview-wrap" id="stamp-company-preview"></div>
+        </div>
+        <div>
+          <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-person').click()">
+            <input type="file" id="inp-stamp-person" accept="image/*" onchange="loadStamp('person',this)">
+            <div style="font-size:1.5rem">&#128100;</div>
+            <div style="font-size:.82rem;color:var(--dim);margin-top:.3rem">負責人章</div>
+            <div class="stamp-hint">PNG / JPG 透明背景佳</div>
+          </div>
+          <div class="stamp-preview-wrap" id="stamp-person-preview"></div>
+        </div>
+        <div>
+          <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-tax').click()">
+            <input type="file" id="inp-stamp-tax" accept="image/*" onchange="loadStamp('tax',this)">
+            <div style="font-size:1.5rem">&#128196;</div>
+            <div style="font-size:.82rem;color:var(--dim);margin-top:.3rem">統編章</div>
+            <div class="stamp-hint">PNG / JPG 透明背景佳</div>
+          </div>
+          <div class="stamp-preview-wrap" id="stamp-tax-preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#128203;</span><span class="slabel">司機 / 備註 / 付款</span></div>
+      <div class="g2">
+        <div class="field"><label>司機姓名</label><input id="f-driver" type="text" placeholder="陳大明"></div>
+        <div class="field"><label>司機電話</label><input id="f-dtel" type="text" placeholder="0900-111-222"></div>
+        <div class="field"><label>車牌號碼</label><input id="f-plate" type="text" placeholder="ABC-1234"></div>
+        <div class="field"><label>付款方式</label>
+          <select id="f-pay">
+            <option value="現金付款">現金付款</option>
+            <option value="轉帳匯款">轉帳匯款</option>
+            <option value="信用卡">信用卡</option>
+            <option value="LINE Pay">LINE Pay</option>
+            <option value="月結">月結</option>
+          </select>
+        </div>
+        <div class="field span2"><label>備註 / 特殊需求</label><textarea id="f-note" placeholder="例：大行李箱 2 個、需嬰兒座椅 1 個…"></textarea></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sh"><span>&#128176;</span><span class="slabel">費用明細</span></div>
+      <div class="price-box">
+        <div class="price-rows" id="price-rows">
+          <div class="price-row"><span class="label" style="color:var(--muted)">← 請先選擇車型</span><span class="val">—</span></div>
+        </div>
+        <div class="pdiv"></div>
+        <div class="ptotal">
+          <span class="label">總計金額</span>
+          <span class="val" id="total-display">NT$ 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generatePreview()">✨ 產生報價單</button>
+      <button class="btn btn-outline" onclick="resetForm()">&#128260; 清除重填</button>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div id="preview-panel" class="panel">
+    <div class="print-actions">
+      <button class="btn btn-outline" onclick="showPanel('form')">&#8592; 返回編輯</button>
+      <button class="btn btn-primary" onclick="window.print()">&#128424;&#65039; 列印全部</button>
+      <button class="btn btn-green" onclick="printOnly('customer')">&#128196; 客戶版列印</button>
+      <button class="btn btn-blue" onclick="printOnly('driver')">&#128663; 司機版列印</button>
+      <button class="btn btn-red" onclick="savePDF('customer')">&#128190; 客戶版 PDF</button>
+      <button class="btn btn-purple" onclick="savePDF('driver')">&#128190; 司機版 PDF</button>
+    </div>
+
+    <!-- 客戶版 -->
+    <div class="quote-doc" id="customer-doc">
+      <div class="qh">
+        <div>
+          <div class="qbn" id="p-company">接送服務</div>
+          <div class="qbs" id="p-company-sub">TRANSFER SERVICE</div>
+        </div>
+        <div class="qmeta">
+          <span class="qnum" id="p-quote-num">Q-000001</span>
+          <div id="p-date-issued"></div>
+          <span class="qbadge airport" id="p-type-badge">機場接送</span>
+        </div>
+      </div>
+      <div class="qbody">
+        <div class="qig">
+          <div class="qib">
+            <div class="qit">客戶資訊</div>
+            <div class="qir"><span class="k">姓名</span><span class="v" id="p-name">—</span></div>
+            <div class="qir"><span class="k">電話</span><span class="v" id="p-ctel">—</span></div>
+            <div class="qir"><span class="k">人數</span><span class="v" id="p-pax">—</span></div>
+          </div>
+          <div class="qib">
+            <div class="qit">行程資訊</div>
+            <div id="p-trip-info"></div>
+          </div>
+        </div>
+        <table class="qtbl">
+          <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">金額（NT$）</th></tr></thead>
+          <tbody id="p-table-body"></tbody>
+        </table>
+        <div class="qtrow">
+          <span class="qtl">合計金額</span>
+          <span class="qtv" id="p-total">NT$ 0</span>
+        </div>
+        <div class="qnote" id="p-note-box" style="display:none">
+          <strong>備註：</strong><span id="p-note-text"></span>
+        </div>
+        <div class="qnote">
+          <strong>付款：</strong><span id="p-pay"></span>
+          &emsp;<strong>電話：</strong><span id="p-tel"></span>
+          &emsp;<strong>LINE：</strong><span id="p-line"></span>
+        </div>
+        <div class="qstamps" id="p-stamps"></div>
+
+      </div>
+      <div class="qfoot">
+        <span>感謝您的信賴，祝旅途愉快</span>
+        <span id="p-footer-num"></span>
+      </div>
+    </div>
+
+    <!-- 司機版 -->
+    <div class="driver-doc" id="driver-doc" style="margin-top:1.8rem">
+      <div class="dhdr">
+        <div>
+          <div class="dht">&#128663; 司機派車單</div>
+          <div class="dhs">DRIVER ASSIGNMENT SHEET</div>
+        </div>
+        <div class="dhb" id="d-quote-num">Q-000001</div>
+      </div>
+      <div class="dbody">
+        <div class="dhi" id="d-highlight"></div>
+        <div class="ds">
+          <div class="dst">&#128100; 客戶資訊</div>
+          <div class="dr"><span class="dk">姓名</span><span class="dv" id="d-name">—</span></div>
+          <div class="dr"><span class="dk">聯絡電話</span><span class="dv" id="d-ctel">—</span></div>
+          <div class="dr"><span class="dk">乘客人數</span><span class="dv" id="d-pax">—</span></div>
+        </div>
+        <div class="ds">
+          <div class="dst" id="d-trip-title">&#9992;&#65039; 行程細節</div>
+          <div id="d-trip-rows"></div>
+        </div>
+        <div class="ds">
+          <div class="dst">&#128665; 車輛資訊</div>
+          <div class="dr"><span class="dk">車型</span><span class="dv" id="d-car">—</span></div>
+          <div class="dr"><span class="dk">車牌號碼</span><span class="dv" id="d-plate">—</span></div>
+          <div class="dr"><span class="dk">司機姓名</span><span class="dv" id="d-driver">—</span></div>
+        </div>
+        <div id="d-extras-section" style="display:none" class="ds">
+          <div class="dst">&#11088; 加購項目</div>
+          <div id="d-extras-rows"></div>
+        </div>
+        <div id="d-note-box" style="display:none">
+          <div class="dst">&#128204; 備註</div>
+          <div class="dsp" id="d-note-text"></div>
+        </div>
+        <div class="ds" style="margin-top:1rem">
+          <div class="dst">&#128176; 收費</div>
+          <div class="dr"><span class="dk">總金額</span><span class="dv" style="color:#c9a84c;font-weight:700;font-size:1.1rem" id="d-total">NT$ 0</span></div>
+          <div class="dr"><span class="dk">付款方式</span><span class="dv" id="d-pay">—</span></div>
+        </div>
+        <div class="dstamps" id="d-stamps"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── STATE (宣告在最前面，所有函式都能用) ──
+var state = { type: 'airport', car: null, extras: new Set() };
+var stamps = { company: null, person: null, tax: null };
+
+var CARS = [
+  { id:'sedan',   icon:'&#128663;', name:'國產轎車',   seats:'1-4 人', baseA:1200, baseC:3500 },
+  { id:'mpv',     icon:'&#128652;', name:'進口車型',   seats:'1-4 人', baseA:1500, baseC:4500 },
+  { id:'van',     icon:'&#128653;', name:'舒適七人座', seats:'1-7 人', baseA:1800, baseC:5500 },
+  { id:'luxury',  icon:'&#127950;', name:'豪華九人座', seats:'1-9 人', baseA:2500, baseC:7000 },
+  { id:'minibus', icon:'&#128654;', name:'小巴士',     seats:'1-12 人',baseA:3000, baseC:8500 },
+  { id:'bus',     icon:'&#128655;', name:'中型巴士',   seats:'1-20 人',baseA:5000, baseC:12000 },
+];
+
+var EXTRAS = [
+  { id:'night',    icon:'&#127769;', name:'深夜加成',     desc:'23:00-06:00', price:300 },
+  { id:'highway',  icon:'&#128739;', name:'高速費代墊',   desc:'依實際費用',  price:200 },
+  { id:'wait',     icon:'&#9200;',   name:'加時費用',     desc:'每30分鐘',    price:200 },
+  { id:'baby',     icon:'&#128118;', name:'嬰兒安全座椅', desc:'每張',        price:300 },
+  { id:'luggage',  icon:'&#129523;', name:'大型行李服務', desc:'4件以上',     price:200 },
+  { id:'bilingual',icon:'&#127760;', name:'中英雙語司機', desc:'全程翻譯',    price:500 },
+  { id:'meet',     icon:'&#128203;', name:'接機舉牌服務', desc:'到航廈接待',  price:200 },
+  { id:'flower',   icon:'&#128144;', name:'鮮花歡迎禮',  desc:'接機/送機',   price:400 },
+];
+
+// ── SIGNATURE ──
+var sigCanvas, sigCtx, sigDrawing = false, sigLastX = 0, sigLastY = 0;
+
+function initSig() {
+  sigCanvas = document.getElementById('sig-canvas');
+  if (!sigCanvas) return;
+  sigCtx = sigCanvas.getContext('2d');
+  sigCtx.strokeStyle = '#1a1a1a';
+  sigCtx.lineWidth = 2.2;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+
+  // Set today's date
+  var sigDateEl = document.getElementById('sig-date');
+  if (sigDateEl) sigDateEl.value = new Date().toISOString().slice(0,10);
+
+  function pos(e) {
+    var r = sigCanvas.getBoundingClientRect();
+    var scaleX = sigCanvas.width / r.width;
+    var scaleY = sigCanvas.height / r.height;
+    var src = e.touches ? e.touches[0] : e;
+    return { x: (src.clientX - r.left) * scaleX, y: (src.clientY - r.top) * scaleY };
+  }
+  function start(e) { e.preventDefault(); sigDrawing = true; var p = pos(e); sigLastX = p.x; sigLastY = p.y; }
+  function move(e) {
+    e.preventDefault();
+    if (!sigDrawing) return;
+    var p = pos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(sigLastX, sigLastY);
+    sigCtx.lineTo(p.x, p.y);
+    sigCtx.stroke();
+    sigLastX = p.x; sigLastY = p.y;
+  }
+  function end(e) { e.preventDefault(); sigDrawing = false; }
+
+  sigCanvas.addEventListener('mousedown', start);
+  sigCanvas.addEventListener('mousemove', move);
+  sigCanvas.addEventListener('mouseup', end);
+  sigCanvas.addEventListener('mouseleave', end);
+  sigCanvas.addEventListener('touchstart', start, { passive: false });
+  sigCanvas.addEventListener('touchmove', move, { passive: false });
+  sigCanvas.addEventListener('touchend', end, { passive: false });
+}
+
+function clearSig() {
+  if (sigCtx) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+}
+
+function saveSig() {
+  if (!sigCanvas) return;
+  // Check if canvas has any drawing
+  var blank = document.createElement('canvas');
+  blank.width = sigCanvas.width; blank.height = sigCanvas.height;
+  if (sigCanvas.toDataURL() === blank.toDataURL()) {
+    alert('請先在簽名框內簽名！'); return;
+  }
+  // Compose signature image with date and name
+  var offCanvas = document.createElement('canvas');
+  offCanvas.width = sigCanvas.width;
+  offCanvas.height = sigCanvas.height + 50;
+  var ctx = offCanvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+  // Draw border
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1;
+  ctx.strokeRect(1, 1, offCanvas.width-2, sigCanvas.height-2);
+  // Draw signature
+  ctx.drawImage(sigCanvas, 0, 0);
+  // Draw date and quote number below
+  ctx.fillStyle = '#555';
+  ctx.font = '14px sans-serif';
+  var dateVal = document.getElementById('sig-date').value || '';
+  var qnum = document.getElementById('p-quote-num') ? document.getElementById('p-quote-num').textContent : '';
+  ctx.fillText('簽名日期：' + dateVal + '　　單號：' + qnum, 10, sigCanvas.height + 30);
+  // Download
+  var link = document.createElement('a');
+  link.download = '客戶簽名-' + qnum + '.png';
+  link.href = offCanvas.toDataURL('image/png');
+  link.click();
+}
+
+function populateTimeSelects() {
+  var dl = document.getElementById('time-list');
+  if (!dl) return;
+  for (var h = 0; h < 24; h++) {
+    for (var m = 0; m < 60; m += 5) {
+      var hh = h < 10 ? '0' + h : '' + h;
+      var mm = m < 10 ? '0' + m : '' + m;
+      var o = document.createElement('option');
+      o.value = hh + ':' + mm;
+      dl.appendChild(o);
+    }
+  }
+}
+
+window.onload = function() {
+  renderCars();
+  renderExtras();
+  populateTimeSelects();
+  var today = new Date().toISOString().slice(0,10);
+  document.getElementById('f-date').value = today;
+  document.getElementById('f-charter-date').value = today;
+  initSig();
+};
+
+function gv(id) {
+  var el = document.getElementById(id);
+  return el ? (el.value || '').trim() : '';
+}
+function sv(id, v) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = v || '—';
+}
+
+function renderCars() {
+  var html = '';
+  for (var i = 0; i < CARS.length; i++) {
+    var c = CARS[i];
+    var p = state.type === 'airport' ? c.baseA : c.baseC;
+    var field = state.type === 'airport' ? 'baseA' : 'baseC';
+    var sel = state.car === c.id ? 'selected' : '';
+    html += '<div class="car-card ' + sel + '" onclick="selectCar(\'' + c.id + '\')">'
+      + '<div class="cpt">NT$&nbsp;<input class="cpi" type="number" min="0" value="' + p + '"'
+      + ' onclick="event.stopPropagation()"'
+      + ' oninput="updateCarPrice(\'' + c.id + '\',\'' + field + '\',this.value)">'
+      + '</div>'
+      + '<div class="car-icon">' + c.icon + '</div>'
+      + '<input class="car-name-input" type="text" value="' + c.name + '"'
+      + ' onclick="event.stopPropagation()"'
+      + ' oninput="updateCarName(\'' + c.id + '\',this.value)">'
+      + '<div class="car-seats">' + c.seats + '</div>'
+      + '</div>';
+  }
+  document.getElementById('car-grid').innerHTML = html;
+}
+
+function renderExtras() {
+  var html = '';
+  for (var i = 0; i < EXTRAS.length; i++) {
+    var e = EXTRAS[i];
+    var sel = state.extras.has(e.id) ? 'selected' : '';
+    html += '<div class="extra-item ' + sel + '" id="extra-' + e.id + '" onclick="toggleExtra(\'' + e.id + '\')">'
+      + '<div class="extra-left">'
+      + '<div class="check-box"></div>'
+      + '<span class="extra-icon">' + e.icon + '</span>'
+      + '<div><div class="extra-name">' + e.name + '</div><div class="extra-desc">' + e.desc + '</div></div>'
+      + '</div>'
+      + '<div class="extra-price">'
+      + '<span class="epp">+NT$</span>'
+      + '<input class="epi" type="number" min="0" value="' + e.price + '"'
+      + ' onclick="event.stopPropagation()"'
+      + ' oninput="updateExtraPrice(\'' + e.id + '\',this.value)">'
+      + '</div></div>';
+  }
+  document.getElementById('extras-list').innerHTML = html;
+}
+
+function updateCarName(id, val) {
+  for (var i = 0; i < CARS.length; i++) {
+    if (CARS[i].id === id) { CARS[i].name = val; break; }
+  }
+}
+
+function updateCarPrice(id, field, val) {
+  for (var i = 0; i < CARS.length; i++) {
+    if (CARS[i].id === id) { CARS[i][field] = parseInt(val) || 0; updatePrice(); break; }
+  }
+}
+
+function updateExtraPrice(id, val) {
+  for (var i = 0; i < EXTRAS.length; i++) {
+    if (EXTRAS[i].id === id) { EXTRAS[i].price = parseInt(val) || 0; updatePrice(); break; }
+  }
+}
+
+function updatePrice() {
+  var rows = document.getElementById('price-rows');
+  var totalEl = document.getElementById('total-display');
+  if (!state.car) {
+    rows.innerHTML = '<div class="price-row"><span class="label" style="color:var(--muted)">← 請先選擇車型</span><span class="val">—</span></div>';
+    totalEl.textContent = 'NT$ 0'; return;
+  }
+  var car = null;
+  for (var i = 0; i < CARS.length; i++) { if (CARS[i].id === state.car) { car = CARS[i]; break; } }
+  var base = state.type === 'airport' ? car.baseA : car.baseC;
+  var html = '<div class="price-row"><span class="label">' + car.name + '（' + (state.type==='airport'?'機場接送':'包車') + '）</span><span class="val">NT$ ' + base.toLocaleString() + '</span></div>';
+  var total = base;
+  state.extras.forEach(function(eid) {
+    var ex = null;
+    for (var j = 0; j < EXTRAS.length; j++) { if (EXTRAS[j].id === eid) { ex = EXTRAS[j]; break; } }
+    if (ex) {
+      html += '<div class="price-row"><span class="label">' + ex.name + '</span><span class="val">+NT$ ' + ex.price.toLocaleString() + '</span></div>';
+      total += ex.price;
+    }
+  });
+  rows.innerHTML = html;
+  totalEl.textContent = 'NT$ ' + total.toLocaleString();
+}
+
+function selectType(t) {
+  state.type = t;
+  document.getElementById('type-airport').classList.toggle('selected', t === 'airport');
+  document.getElementById('type-charter').classList.toggle('selected', t === 'charter');
+  document.getElementById('airport-fields').style.display = t === 'airport' ? '' : 'none';
+  document.getElementById('charter-fields').style.display = t === 'charter' ? '' : 'none';
+  renderCars(); updatePrice();
+}
+
+function selectCar(id) {
+  state.car = id;
+  renderCars(); updatePrice();
+}
+
+function toggleExtra(id) {
+  if (state.extras.has(id)) state.extras.delete(id);
+  else state.extras.add(id);
+  renderExtras(); updatePrice();
+}
+
+function toggleCustomDirection(val) {
+  var el = document.getElementById('f-direction-custom');
+  var airportField = document.getElementById('airport-field');
+  var routeField = document.getElementById('custom-route-field');
+  var flightField = document.getElementById('flight-field');
+  el.style.display = val === '__custom__' ? '' : 'none';
+  airportField.style.display = val === '__custom__' ? 'none' : '';
+  routeField.style.display = val === '__custom__' ? '' : 'none';
+  if (val === '__custom__') el.focus();
+}
+
+function getDirection() {
+  var sel = document.getElementById('f-direction');
+  if (sel.value === '__custom__') {
+    return document.getElementById('f-direction-custom').value.trim() || '自訂接送';
+  }
+  return sel.value;
+}
+
+function toggleCustomCharter(val) {
+  var el = document.getElementById('f-charter-custom');
+  el.style.display = val === '__custom__' ? '' : 'none';
+  if (val === '__custom__') el.focus();
+}
+
+function getCharterType() {
+  var sel = document.getElementById('f-charter-type');
+  if (sel.value === '__custom__') {
+    return document.getElementById('f-charter-custom').value.trim() || '自訂行程';
+  }
+  return sel.value;
+}
+
+function loadStamp(type, input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    stamps[type] = e.target.result;
+    var wrap = document.getElementById('stamp-' + type + '-preview');
+    wrap.innerHTML = '<div class="stamp-preview-item">'
+      + '<img src="' + e.target.result + '">'
+      + '<button class="stamp-remove" onclick="removeStamp(\'' + type + '\')">&#10005;</button>'
+      + '</div>';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeStamp(type) {
+  stamps[type] = null;
+  document.getElementById('stamp-' + type + '-preview').innerHTML = '';
+  document.getElementById('inp-stamp-' + type).value = '';
+}
+
+function renderStamps() {
+  var labels = { company:'公司印', person:'負責人', tax:'統一編號' };
+  var sizes = { company:'90px', person:'90px', tax:'120px' };
+  var phtml = '', dhtml = '';
+  ['company','person','tax'].forEach(function(t) {
+    if (stamps[t]) {
+      var tag = '<div class="stamp-label-text">' + labels[t] + '</div>';
+      phtml += '<div class="stamp-wrap"><img src="' + stamps[t] + '" style="width:' + sizes[t] + ';height:' + sizes[t] + '">' + tag + '</div>';
+      dhtml += '<div class="stamp-wrap"><img src="' + stamps[t] + '" style="width:' + sizes[t] + ';height:' + sizes[t] + '">' + tag + '</div>';
+    }
+  });
+  document.getElementById('p-stamps').innerHTML = phtml;
+  document.getElementById('d-stamps').innerHTML = dhtml;
+}
+
+function qrow(k, v) {
+  if (!v || v === '—') return '';
+  return '<div class="qir"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+}
+function drow(k, v) {
+  if (!v || v === '—') return '';
+  return '<div class="dr"><span class="dk">' + k + '</span><span class="dv">' + v + '</span></div>';
+}
+function hibox(label, val, sub) {
+  return '<div class="dhb2"><div class="dhl">' + label + '</div><div class="dhv">' + val + '</div>' + (sub ? '<div class="dhsub">' + sub + '</div>' : '') + '</div>';
+}
+
+function generatePreview() {
+  if (!state.car) { alert('⚠️ 請先選擇車型！'); return; }
+  var car = null;
+  for (var i = 0; i < CARS.length; i++) { if (CARS[i].id === state.car) { car = CARS[i]; break; } }
+  var base = state.type === 'airport' ? car.baseA : car.baseC;
+  var total = base;
+  state.extras.forEach(function(eid) {
+    for (var j = 0; j < EXTRAS.length; j++) { if (EXTRAS[j].id === eid) { total += EXTRAS[j].price; break; } }
+  });
+
+  var num = 'Q-' + Date.now().toString().slice(-6);
+  var now = new Date().toLocaleDateString('zh-TW');
+  var company = gv('f-company') || '接送服務';
+
+  sv('p-company', company);
+  document.getElementById('p-company-sub').textContent = company.toUpperCase();
+  sv('p-quote-num', num);
+  document.getElementById('p-date-issued').textContent = '開立日期：' + now;
+  document.getElementById('d-quote-num').textContent = num;
+  var badge = document.getElementById('p-type-badge');
+  badge.textContent = state.type === 'airport' ? '機場接送' : '包車服務';
+  badge.className = 'qbadge ' + state.type;
+
+  sv('p-name', gv('f-name')); sv('p-ctel', gv('f-ctel'));
+  sv('p-pax', gv('f-pax') ? gv('f-pax') + ' 人' : '');
+  sv('d-name', gv('f-name')); sv('d-ctel', gv('f-ctel'));
+  sv('d-pax', gv('f-pax') ? gv('f-pax') + ' 人' : '');
+
+  var tripHTML = '', dTripHTML = '', dHi = '';
+  if (state.type === 'airport') {
+    var dir=getDirection(), ap=gv('f-airport'), fl=gv('f-flight');
+    var isCustomDir = document.getElementById('f-direction').value === '__custom__';
+    var dest=gv('f-dest'), date=gv('f-date'), time=gv('f-time');
+    var pickup=gv('f-pickup-time'), dropoff=gv('f-dropoff-time');
+    var customRoute = gv('f-custom-route');
+    tripHTML = qrow('方向',dir)+(isCustomDir?'':qrow('機場',ap))+qrow('航班',fl)+qrow('目的地',dest)+(isCustomDir&&customRoute?qrow('行程內容',customRoute):'')+qrow('日期',(date||'—'))+qrow('集合時間',time||'—')+(pickup?qrow('上車時間',pickup):'')+(dropoff?qrow('下車時間',dropoff):'');
+    dTripHTML = (isCustomDir?'':drow('機場',ap))+drow('航班號碼',fl)+drow('目的地',dest)+(isCustomDir&&customRoute?drow('行程內容',customRoute):'')+drow('集合時間',time||'—')+(pickup?drow('上車時間',pickup):'')+(dropoff?drow('下車時間',dropoff):'');
+    dHi = hibox('服務方向',dir||'—','') + hibox('日期 / 時間',date||'—',time||'');
+    document.getElementById('d-trip-title').textContent = '行程細節';
+  } else {
+    var ct=getCharterType(), cd=gv('f-charter-date');
+    var ctm=gv('f-charter-time'), cf=gv('f-charter-from'), cr=gv('f-charter-route');
+    var cpickup=gv('f-charter-pickup'), cdropoff=gv('f-charter-dropoff');
+    tripHTML = qrow('包車類型',ct)+qrow('日期',cd)+qrow('出發時間',ctm)+(cpickup?qrow('上車時間',cpickup):'')+(cdropoff?qrow('下車時間',cdropoff):'')+qrow('出發地點',cf)+qrow('行程路線',cr);
+    dTripHTML = drow('出發地點',cf)+drow('行程路線',cr)+drow('出發時間',ctm)+(cpickup?drow('上車時間',cpickup):'')+(cdropoff?drow('下車時間',cdropoff):'');
+    dHi = hibox('包車類型',ct||'—','') + hibox('日期 / 集合',cd||'—',ctm||'');
+    document.getElementById('d-trip-title').textContent = '包車行程細節';
+  }
+  document.getElementById('p-trip-info').innerHTML = tripHTML;
+  document.getElementById('d-trip-rows').innerHTML = dTripHTML;
+  document.getElementById('d-highlight').innerHTML = dHi;
+
+  var tbody = '<tr><td>' + car.name + '</td><td>' + (state.type==='airport'?'機場接送':'包車服務') + ' · ' + car.seats + '</td><td class="tdp">' + (base > 0 ? 'NT$ ' + base.toLocaleString() : '—') + '</td></tr>';
+  var dExtras = '';
+  state.extras.forEach(function(eid) {
+    var ex = null;
+    for (var j = 0; j < EXTRAS.length; j++) { if (EXTRAS[j].id === eid) { ex = EXTRAS[j]; break; } }
+    if (ex) {
+      tbody += '<tr><td>' + ex.name + '</td><td>' + ex.desc + '</td><td class="tdp">' + (ex.price > 0 ? '+NT$ ' + ex.price.toLocaleString() : '—') + '</td></tr>';
+      dExtras += drow(ex.name, ex.price > 0 ? '+NT$ ' + ex.price.toLocaleString() : '—');
+    }
+  });
+  document.getElementById('p-table-body').innerHTML = tbody;
+  if (dExtras) {
+    document.getElementById('d-extras-section').style.display = '';
+    document.getElementById('d-extras-rows').innerHTML = dExtras;
+  } else {
+    document.getElementById('d-extras-section').style.display = 'none';
+  }
+
+  sv('p-total', total > 0 ? 'NT$ ' + total.toLocaleString() : '—');
+  sv('d-total', total > 0 ? 'NT$ ' + total.toLocaleString() : '—');
+  document.getElementById('p-footer-num').textContent = num;
+
+  var note = gv('f-note');
+  if (note) {
+    document.getElementById('p-note-box').style.display = '';
+    sv('p-note-text', note);
+    document.getElementById('d-note-box').style.display = '';
+    document.getElementById('d-note-text').textContent = note;
+  } else {
+    document.getElementById('p-note-box').style.display = 'none';
+    document.getElementById('d-note-box').style.display = 'none';
+  }
+
+  sv('p-pay', gv('f-pay')); sv('p-tel', gv('f-tel')); sv('p-line', gv('f-line'));
+  sv('d-car', car.name + ' (' + car.seats + ')');
+  sv('d-plate', gv('f-plate')); sv('d-driver', gv('f-driver')); sv('d-pay', gv('f-pay'));
+
+  renderStamps();
+  showPanel('preview');
+}
+
+function showPanel(name) {
+  document.getElementById('form-panel').classList.toggle('active', name === 'form');
+  document.getElementById('preview-panel').classList.toggle('active', name === 'preview');
+  var btns = document.querySelectorAll('.mode-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle('active', i === (name === 'form' ? 0 : 1));
+  }
+  window.scrollTo(0, 0);
+}
+
+function resetForm() {
+  state = { type: 'airport', car: null, extras: new Set() };
+  var ids = ['f-company','f-tel','f-line','f-name','f-ctel','f-pax',
+             'f-flight','f-dest','f-time','f-pickup-time','f-dropoff-time',
+             'f-charter-time','f-charter-pickup','f-charter-dropoff',
+             'f-charter-from','f-charter-route','f-driver','f-dtel',
+             'f-plate','f-note','f-charter-custom','f-custom-route'];
+  ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+  ['f-direction','f-airport','f-charter-type','f-pay'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.selectedIndex = 0;
+  });
+  var today = new Date().toISOString().slice(0,10);
+  document.getElementById('f-date').value = today;
+  document.getElementById('f-charter-date').value = today;
+  document.getElementById('f-direction-custom').style.display = 'none';
+  document.getElementById('f-custom-route').value = '';
+  document.getElementById('custom-route-field').style.display = 'none';
+  document.getElementById('airport-field').style.display = '';
+  document.getElementById('f-charter-custom').style.display = 'none';
+  document.getElementById('airport-fields').style.display = '';
+  document.getElementById('charter-fields').style.display = 'none';
+  renderCars(); renderExtras(); updatePrice();
+  window.scrollTo(0, 0);
+}
+
+function printOnly(which) {
+  var hide = which === 'customer' ? 'driver-doc' : 'customer-doc';
+  document.getElementById(hide).style.display = 'none';
+  window.print();
+  document.getElementById(hide).style.display = '';
+}
+
+function savePDF(which) {
+  if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+    alert('PDF 功能需要網路連線載入，請確認網路後再試。'); return;
+  }
+  var el = document.getElementById(which === 'customer' ? 'customer-doc' : 'driver-doc');
+  var btn = event.currentTarget;
+  var origText = btn.innerHTML;
+  btn.innerHTML = '&#9203; 處理中…'; btn.disabled = true;
+
+  var rect = el.getBoundingClientRect();
+
+  html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: which === 'customer' ? '#ffffff' : '#f0f2f5',
+    width: rect.width,
+    height: rect.height,
+    windowWidth: rect.width,
+    windowHeight: rect.height,
+    scrollX: 0,
+    scrollY: -window.scrollY
+  }).then(function(canvas) {
+    // Crop to actual content height
+    var ctx = canvas.getContext('2d');
+    var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var lastRow = 0;
+    for (var y = canvas.height - 1; y >= 0; y--) {
+      var hasContent = false;
+      for (var x = 0; x < canvas.width; x++) {
+        var idx = (y * canvas.width + x) * 4;
+        var r = data.data[idx], g = data.data[idx+1], b = data.data[idx+2];
+        if (!(r > 240 && g > 240 && b > 240) && !(r === 0 && g === 0 && b === 0 && data.data[idx+3] === 0)) {
+          hasContent = true; break;
+        }
+      }
+      if (hasContent) { lastRow = y + 20; break; }
+    }
+    var cropHeight = Math.min(lastRow, canvas.height);
+    var cropped = document.createElement('canvas');
+    cropped.width = canvas.width;
+    cropped.height = cropHeight;
+    var cctx = cropped.getContext('2d');
+    cctx.drawImage(canvas, 0, 0, canvas.width, cropHeight, 0, 0, canvas.width, cropHeight);
+
+    var imgData = cropped.toDataURL('image/png');
+    var pdf = new jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    var pdfW = pdf.internal.pageSize.getWidth();
+    var pdfH = cropped.height * pdfW / cropped.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH);
+    var label = which === 'customer' ? '客戶報價單' : '司機派車單';
+    var num = document.getElementById(which === 'customer' ? 'p-quote-num' : 'd-quote-num').textContent;
+    pdf.save(label + '-' + num + '.pdf');
+    btn.innerHTML = origText; btn.disabled = false;
+  }).catch(function() {
+    alert('PDF 產生失敗，請改用「列印」功能，在列印畫面選擇「另存為 PDF」。');
+    btn.innerHTML = origText; btn.disabled = false;
+  });
+}
+</script>
+</body>
+</html>

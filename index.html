@@ -477,6 +477,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
             <div id="p-trip-info"></div>
           </div>
         </div>
+        <div class="qib" id="p-driver-box" style="margin-bottom:1rem;display:none">
+          <div class="qit">司機資訊</div>
+          <div class="qig" style="margin-bottom:0">
+            <div class="qir"><span class="k">司機姓名</span><span class="v" id="p-driver-name">—</span></div>
+            <div class="qir"><span class="k">車牌號碼</span><span class="v" id="p-driver-plate">—</span></div>
+          </div>
+        </div>
         <table class="qtbl">
           <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">金額（NT$）</th></tr></thead>
           <tbody id="p-table-body"></tbody>
@@ -965,6 +972,18 @@ function generatePreview() {
   sv('p-pay', gv('f-pay')); sv('p-tel', gv('f-tel')); sv('p-line', gv('f-line'));
   sv('d-car', car.name + ' (' + car.seats + ')');
   sv('d-plate', gv('f-plate')); sv('d-driver', gv('f-driver')); sv('d-pay', gv('f-pay'));
+
+  // 司機資訊顯示在客戶版
+  var driverName = gv('f-driver');
+  var driverPlate = gv('f-plate');
+  var driverBox = document.getElementById('p-driver-box');
+  if (driverName || driverPlate) {
+    driverBox.style.display = '';
+    sv('p-driver-name', driverName);
+    sv('p-driver-plate', driverPlate);
+  } else {
+    driverBox.style.display = 'none';
+  }
 
   renderStamps();
   showPanel('preview');

@@ -406,7 +406,10 @@ function loadFromURL() {
     // 如果連結有帶 Gist ID，從雲端載入章
     if (data.gi) {
       fetch('https://api.github.com/gists/' + data.gi, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': 'token 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'
+        }
       }).then(function(r){ return r.json(); })
         .then(function(d){
           try {

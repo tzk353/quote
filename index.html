@@ -1132,7 +1132,6 @@ function generatePreview() {
 }
 
 function genDriverLink() {
-  // 取報價單上已顯示的資料（從預覽頁面讀取）
   var carName = document.getElementById('d-car') ? document.getElementById('d-car').textContent : '';
   var base = 0;
   if (state.car) {
@@ -1141,51 +1140,57 @@ function genDriverLink() {
     if (car) base = state.type === 'airport' ? car.baseA : car.baseC;
   }
 
-  // 附加服務只存 localStorage（不放網址）
+  // 附加服務存 localStorage
   try {
     localStorage.setItem('quoteExtras', JSON.stringify(
       EXTRAS.map(function(e){ return [e.name, e.desc, e.price]; })
     ));
   } catch(e2) {}
 
-  // 把章壓縮後放進連結（縮小到 80x80）
-  function compressStamp(dataUrl, cb) {
-    if (!dataUrl) { cb(null); return; }
+  var raw = {
+    n:  gv('f-name'),
+    p:  gv('f-pax'),
+    c:  carName.replace(/\s*\(.*\)/, '').trim() || gv('f-car'),
+    pl: gv('f-plate'),
+    dr: gv('f-driver'),
+    dt: state.type === 'airport' ? gv('f-date') : gv('f-charter-date'),
+    tp: state.type === 'airport' ? (document.getElementById('f-direction').value === '__custom__' ? getDirection() : gv('f-direction')) : getCharterType(),
+    fr: state.type === 'airport' ? gv('f-airport') : gv('f-charter-from'),
+    to: gv('f-dest') || gv('f-charter-route'),
+    py: gv('f-pay'),
+    b:  base,
+    no: gv('f-note'),
+    id: document.getElementById('p-quote-num') ? document.getElementById('p-quote-num').textContent : '',
+    co: gv('f-company')
+  };
+
+  // 把章壓縮成 50x50 JPEG 放入連結
+  function shrinkStamp(src, cb) {
+    if (!src) { cb(null); return; }
     var img = new Image();
     img.onload = function() {
-      var canvas = document.createElement('canvas');
-      canvas.width = 80; canvas.height = 80;
-      canvas.getContext('2d').drawImage(img, 0, 0, 80, 80);
-      cb(canvas.toDataURL('image/png', 0.5).split(',')[1]);
+      var c = document.createElement('canvas');
+      c.width = 50; c.height = 50;
+      c.getContext('2d').drawImage(img, 0, 0, 50, 50);
+      cb(c.toDataURL('image/jpeg', 0.3).split(',')[1]);
     };
     img.onerror = function() { cb(null); };
-    img.src = dataUrl;
+    img.src = src;
   }
 
-  var stampKeys = ['company','person','tax'];
-  var stampData = {};
-  var pending = stampKeys.length;
+  var keys = ['company','person','tax'];
+  var sdata = {}; var left = keys.length;
+  keys.forEach(function(k) {
+    shrinkStamp(stamps[k], function(v) {
+      if (v) sdata[k] = v;
+      if (--left === 0) buildLink();
+    });
+  });
 
-  function afterStamps() {
-    var raw = {
-      n:  gv('f-name'),
-      p:  gv('f-pax'),
-      c:  carName.replace(/\s*\(.*\)/, '').trim() || gv('f-car'),
-      pl: gv('f-plate'),
-      dr: gv('f-driver'),
-      dt: state.type === 'airport' ? gv('f-date') : gv('f-charter-date'),
-      tp: state.type === 'airport' ? (document.getElementById('f-direction').value === '__custom__' ? getDirection() : gv('f-direction')) : getCharterType(),
-      fr: state.type === 'airport' ? gv('f-airport') : gv('f-charter-from'),
-      to: gv('f-dest') || gv('f-charter-route'),
-      py: gv('f-pay'),
-      b:  base,
-      no: gv('f-note'),
-      id: document.getElementById('p-quote-num') ? document.getElementById('p-quote-num').textContent : '',
-      co: gv('f-company'),
-      s1: stampData.company || null,
-      s2: stampData.person  || null,
-      s3: stampData.tax     || null
-    };
+  function buildLink() {
+    if (sdata.company) raw.s1 = sdata.company;
+    if (sdata.person)  raw.s2 = sdata.person;
+    if (sdata.tax)     raw.s3 = sdata.tax;
 
     var data = {};
     Object.keys(raw).forEach(function(k) {
@@ -1198,23 +1203,13 @@ function genDriverLink() {
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
     var href = window.location.href.split('?')[0];
-    var driverBase = href.replace(/[^/]*$/, '') + 'driver.html';
-    var url = driverBase + '?d=' + encoded;
+    var url = href.replace(/[^/]*$/, '') + 'driver.html?d=' + encoded;
 
     document.getElementById('driver-link-box').style.display = '';
     var linkEl = document.getElementById('driver-link-url');
     linkEl.href = url;
-    var shortDisplay = url.split('/driver.html')[0] + '/driver.html?d=...';
-    linkEl.textContent = shortDisplay;
+    linkEl.textContent = url.replace(/\?d=.*/, '?d=...');
   }
-
-  stampKeys.forEach(function(k) {
-    compressStamp(stamps[k], function(compressed) {
-      if (compressed) stampData[k] = compressed;
-      pending--;
-      if (pending === 0) afterStamps();
-    });
-  });
 }
 
 function copyDriverLink() {

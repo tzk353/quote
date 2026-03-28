@@ -123,7 +123,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:15px
 .rtotal{display:flex;justify-content:flex-end;align-items:center;gap:1.5rem;padding:.75rem 1rem;background:#fdf8ee;border-radius:9px;border:1px solid #e8d9a8;margin-bottom:.85rem}
 .rtl{font-size:.9rem;font-weight:600;color:#444}
 .rtv{font-family:var(--fm);font-size:1.3rem;color:#b8870a;font-weight:700}
-.r-stamps{display:flex;gap:.8rem;justify-content:flex-end;flex-wrap:wrap;padding:.5rem 0}
+.r-stamps{display:flex;gap:1.2rem;justify-content:flex-end;align-items:flex-end;flex-wrap:wrap;padding:.6rem 0 .2rem}
+.r-stamp-item{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+.r-stamp-item img{object-fit:contain;opacity:.92}
+.r-stamp-label{font-size:.62rem;color:#888;font-family:DM Mono,monospace;letter-spacing:.04em;text-align:center}
 .rsig{border-top:2px dashed #e0e4ef;padding:.85rem 0 .4rem;margin-top:.4rem}
 .rsig-t{font-family:var(--fm);font-size:.6rem;letter-spacing:.14em;color:#999;text-transform:uppercase;margin-bottom:.5rem}
 .rsig-box{border:1.5px dashed #ccc;border-radius:8px;background:#f9fafc;overflow:hidden;min-height:80px;display:flex;align-items:center;justify-content:center}
@@ -579,10 +582,10 @@ function completeOrder(){
   try{saved=JSON.parse(localStorage.getItem('quoteStamps')||'{}');}catch(e){}
   var coName=saved.companyName||'';
   var slabels={company:'公司印',person:'負責人',tax:'統一編號'};
-  var ssizes={company:'80px',person:'80px',tax:'100px'};
+  var ssizes={company:'72px',person:'72px',tax:'90px'};
   var stampsHtml='';
   ['company','person','tax'].forEach(function(t){
-    if(saved[t]) stampsHtml+='<div style="display:flex;flex-direction:column;align-items:center;gap:.25rem"><img src="'+saved[t]+'" style="width:'+ssizes[t]+';height:'+ssizes[t]+';object-fit:contain;opacity:.9"><div style="font-size:.65rem;color:#888;font-family:DM Mono,monospace">'+slabels[t]+'</div></div>';
+    if(saved[t]) stampsHtml+='<div class="r-stamp-item"><img src="'+saved[t]+'" style="width:'+ssizes[t]+';height:'+ssizes[t]+'"><div class="r-stamp-label">'+slabels[t]+'</div></div>';
   });
 
   var extrasRows='';

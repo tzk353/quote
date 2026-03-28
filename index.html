@@ -1164,52 +1164,23 @@ function genDriverLink() {
     co: gv('f-company')
   };
 
-  // 把章壓縮成 50x50 JPEG 放入連結
-  function shrinkStamp(src, cb) {
-    if (!src) { cb(null); return; }
-    var img = new Image();
-    img.onload = function() {
-      var c = document.createElement('canvas');
-      c.width = 50; c.height = 50;
-      c.getContext('2d').drawImage(img, 0, 0, 50, 50);
-      cb(c.toDataURL('image/jpeg', 0.3).split(',')[1]);
-    };
-    img.onerror = function() { cb(null); };
-    img.src = src;
-  }
-
-  var keys = ['company','person','tax'];
-  var sdata = {}; var left = keys.length;
-  keys.forEach(function(k) {
-    shrinkStamp(stamps[k], function(v) {
-      if (v) sdata[k] = v;
-      if (--left === 0) buildLink();
-    });
+  var data = {};
+  Object.keys(raw).forEach(function(k) {
+    if (raw[k] !== '' && raw[k] !== null && raw[k] !== undefined && raw[k] !== 0) {
+      data[k] = raw[k];
+    }
   });
 
-  function buildLink() {
-    if (sdata.company) raw.s1 = sdata.company;
-    if (sdata.person)  raw.s2 = sdata.person;
-    if (sdata.tax)     raw.s3 = sdata.tax;
+  var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
-    var data = {};
-    Object.keys(raw).forEach(function(k) {
-      if (raw[k] !== '' && raw[k] !== null && raw[k] !== undefined && raw[k] !== 0) {
-        data[k] = raw[k];
-      }
-    });
+  var href = window.location.href.split('?')[0];
+  var url = href.replace(/[^/]*$/, '') + 'driver.html?d=' + encoded;
 
-    var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))))
-      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-
-    var href = window.location.href.split('?')[0];
-    var url = href.replace(/[^/]*$/, '') + 'driver.html?d=' + encoded;
-
-    document.getElementById('driver-link-box').style.display = '';
-    var linkEl = document.getElementById('driver-link-url');
-    linkEl.href = url;
-    linkEl.textContent = url.replace(/\?d=.*/, '?d=...');
-  }
+  document.getElementById('driver-link-box').style.display = '';
+  var linkEl = document.getElementById('driver-link-url');
+  linkEl.href = url;
+  linkEl.textContent = url.replace(/\?d=.*/, '?d=...');
 }
 
 function copyDriverLink() {

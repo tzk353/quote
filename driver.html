@@ -361,18 +361,18 @@ function loadFromURL() {
 
     function sv(id, v) { var el=document.getElementById(id); if(el) el.textContent=v||'—'; }
     sv('d-name', data.n);
-    sv('d-ctel', data.ct);
+    sv('d-ctel', data.ct || '');
     sv('d-pax', data.p ? data.p+' 人' : '');
     sv('d-car', data.c);
-    sv('d-plate', data.pl);
-    sv('d-driver', data.dr);
+    sv('d-plate', data.pl || '');
+    sv('d-driver', data.dr || '');
     sv('d-type', data.tp);
     sv('d-from', data.fr);
-    sv('d-to', data.to);
+    sv('d-to', data.to || '');
     sv('d-date', data.dt);
-    sv('d-pay', data.py);
+    sv('d-pay', data.py || '');
     baseAmt = parseInt(data.b) || 0;
-    sv('d-base', baseAmt>0 ? 'NT$ '+baseAmt.toLocaleString() : '—');
+    sv('d-base', baseAmt > 0 ? 'NT$ ' + baseAmt.toLocaleString() : '—');
     if (data.no) {
       sv('d-note', data.no);
       document.getElementById('d-note-row').style.display = '';
@@ -396,15 +396,14 @@ function loadFromURL() {
     } else {
       loadDefaultExtras();
     }
-    renderExtras();
-    document.getElementById('final-amount').value = baseAmt || '';
+    renderExtras(); // baseAmt 已設好，試算正確
 
     if (data.id) {
       var hb = document.getElementById('hbadge');
       hb.textContent = data.id; hb.style.display = '';
     }
     var banner = document.getElementById('loaded-banner');
-    banner.textContent = '&#10003; 已載入報價單 '+(data.id||'');
+    banner.textContent = '✅ 已載入報價單 '+(data.id||'');
     banner.style.display = '';
   } catch(e) {
     console.log('loadFromURL error:', e);

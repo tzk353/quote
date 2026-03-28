@@ -352,6 +352,9 @@ function loadFromURL() {
       loadDefaultExtras();
       return;
     }
+    // URL-safe base64 轉回標準 base64
+    d = d.replace(/-/g, '+').replace(/_/g, '/');
+    while (d.length % 4) d += '=';
     // 正確解碼中文
     var jsonStr = decodeURIComponent(Array.prototype.map.call(atob(d), function(c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);

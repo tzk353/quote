@@ -390,7 +390,14 @@ function loadFromURL() {
       }
     }
 
-    // 附加服務：優先從 localStorage 讀取（同裝置），否則用預設值
+    // 章和公司名稱從連結讀取
+    if (data.co || data.s1 || data.s2 || data.s3) {
+      var toSave = { companyName: data.co||'' };
+      if (data.s1) toSave.company = 'data:image/png;base64,' + data.s1;
+      if (data.s2) toSave.person  = 'data:image/png;base64,' + data.s2;
+      if (data.s3) toSave.tax     = 'data:image/png;base64,' + data.s3;
+      try { localStorage.setItem('quoteStamps', JSON.stringify(toSave)); } catch(ex) {}
+    }
     var savedExtras = null;
     try { savedExtras = JSON.parse(localStorage.getItem('quoteExtras')||'null'); } catch(ex){}
     if (savedExtras && savedExtras.length) {

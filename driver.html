@@ -295,7 +295,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:15px
       <button class="btn btn-red2" onclick="savePDF()">&#128196; 存 PDF</button>
     </div>
     <div id="receipt-wrap"></div>
-    <button class="btn btn-outline" onclick="newOrder()" style="margin-top:.8rem">&#128260; 新的結單</button>
+    <button class="btn btn-outline" onclick="backToEdit()" style="margin-top:.8rem">&#9998; 返回修改金額</button>
+    <button class="btn btn-outline" onclick="newOrder()" style="margin-top:.4rem">&#128260; 新的結單</button>
   </div>
 </div>
 
@@ -637,6 +638,11 @@ function renderRecords(){
       +'<button class="rec-del" onclick="delRec('+i+')">&#128465; 刪除</button>'
       +'</div>';
   }).join('');
+}
+
+function backToEdit(){
+  // 返回費用頁面修改，簽名保留
+  goStep(3);
 }
 
 function newOrder(){

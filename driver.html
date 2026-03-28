@@ -468,14 +468,8 @@ function updatePrice() {
   });
   document.getElementById('price-rows').innerHTML = rows;
   document.getElementById('price-total').textContent = total>0 ? 'NT$ '+total.toLocaleString() : '—';
-  var fa = document.getElementById('final-amount');
-  if (!fa.dataset.touched) fa.value = total>0 ? total : '';
+  document.getElementById('final-amount').value = total>0 ? total : '';
 }
-
-document.addEventListener('DOMContentLoaded', function(){
-  var fa = document.getElementById('final-amount');
-  if (fa) fa.addEventListener('input', function(){ fa.dataset.touched='1'; });
-});
 
 function calcDur() {
   var p=document.getElementById('s-pickup').value, d=document.getElementById('s-dropoff').value;
@@ -648,7 +642,6 @@ function renderRecords(){
 function newOrder(){
   orderData={};baseAmt=0;
   document.getElementById('final-amount').value='';
-  delete document.getElementById('final-amount').dataset.touched;
   document.getElementById('s-pickup').value='';
   document.getElementById('s-dropoff').value='';
   document.getElementById('s-note').value='';

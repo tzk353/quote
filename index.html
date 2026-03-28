@@ -493,11 +493,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
     <div id="driver-link-box" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:.9rem 1rem;margin-bottom:1rem">
       <div style="font-size:.72rem;color:#166534;font-family:'DM Mono',monospace;margin-bottom:.6rem;letter-spacing:.1em">&#128279; 司機端連結</div>
-      <a id="driver-link-url" href="#" target="_blank" style="display:block;font-size:.78rem;color:#15803d;word-break:break-all;margin-bottom:.7rem;line-height:1.6;background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:.5rem .7rem;text-decoration:underline"></a>
+      <a id="driver-link-url" href="#" target="_blank" style="display:block;font-size:.82rem;color:#15803d;word-break:break-all;margin-bottom:.7rem;line-height:1.5;background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:.5rem .7rem;text-decoration:underline"></a>
       <div style="display:flex;gap:.5rem;flex-wrap:wrap">
         <button onclick="copyShortened()" id="copy-driver-btn" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:7px;padding:.55rem .8rem;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Noto Sans TC',sans-serif">&#128203; 複製連結傳給司機</button>
       </div>
-      <div style="font-size:.7rem;color:#4ade80;margin-top:.5rem">點連結可開啟預覽・按鈕可複製後貼到 LINE</div>
+      <div style="font-size:.7rem;color:#888;margin-top:.5rem">點連結可開啟預覽・按複製按鈕後貼到 LINE 傳給司機</div>
     </div>
 
     <!-- 客戶版 -->
@@ -1141,6 +1141,13 @@ function genDriverLink() {
     if (car) base = state.type === 'airport' ? car.baseA : car.baseC;
   }
 
+  // 附加服務只存 localStorage（不放網址）
+  try {
+    localStorage.setItem('quoteExtras', JSON.stringify(
+      EXTRAS.map(function(e){ return [e.name, e.desc, e.price]; })
+    ));
+  } catch(e2) {}
+
   var raw = {
     n:  gv('f-name'),
     p:  gv('f-pax'),
@@ -1156,13 +1163,6 @@ function genDriverLink() {
     no: gv('f-note'),
     id: document.getElementById('p-quote-num') ? document.getElementById('p-quote-num').textContent : ''
   };
-
-  // 附加服務存到 localStorage，不放進網址
-  try {
-    localStorage.setItem('quoteExtras', JSON.stringify(
-      EXTRAS.map(function(e){ return {id:e.id, name:e.name, desc:e.desc, price:e.price}; })
-    ));
-  } catch(e) {}
 
   var data = {};
   Object.keys(raw).forEach(function(k) {
@@ -1181,7 +1181,9 @@ function genDriverLink() {
   document.getElementById('driver-link-box').style.display = '';
   var linkEl = document.getElementById('driver-link-url');
   linkEl.href = url;
-  linkEl.textContent = url;
+  // 顯示縮短的文字，完整連結在 href 裡
+  var shortDisplay = url.split('/driver.html')[0] + '/driver.html?d=...';
+  linkEl.textContent = shortDisplay;
 }
 
 function copyDriverLink() {

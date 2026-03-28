@@ -930,16 +930,10 @@ function getCharterType() {
 }
 
 // ── Gist 章同步 ──────────────────────────────────────────
-var GIST_FILE = 'stamps.json';
+var GIST_FILE  = 'stamps.json';
+var GIST_TOKEN = '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';
 
-function getGistToken() {
-  var t = localStorage.getItem('gistToken') || '';
-  if (!t) {
-    t = prompt('請輸入 GitHub Token（只需輸入一次，之後自動記住）：\n\n到 github.com/settings/tokens 取得，勾選 gist 權限。');
-    if (t) localStorage.setItem('gistToken', t.trim());
-  }
-  return (t || '').trim();
-}
+function getGistToken() { return GIST_TOKEN; }
 
 function getGistId() {
   return localStorage.getItem('stampGistId') || '';

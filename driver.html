@@ -343,7 +343,15 @@ function loadFromURL() {
   try {
     var p = new URLSearchParams(window.location.search);
     var d = p.get('d');
-    if (!d) return;
+    if (!d) {
+      document.getElementById('loaded-banner').textContent = '⚠️ 連結沒有帶入資料，請重新從報價單產生連結';
+      document.getElementById('loaded-banner').style.display = '';
+      document.getElementById('loaded-banner').style.background = '#fef2f2';
+      document.getElementById('loaded-banner').style.borderColor = '#fca5a5';
+      document.getElementById('loaded-banner').style.color = '#dc2626';
+      loadDefaultExtras();
+      return;
+    }
     // 正確解碼中文
     var jsonStr = decodeURIComponent(Array.prototype.map.call(atob(d), function(c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
@@ -398,7 +406,13 @@ function loadFromURL() {
     var banner = document.getElementById('loaded-banner');
     banner.textContent = '&#10003; 已載入報價單 '+(data.id||'');
     banner.style.display = '';
-  } catch(e) { console.log('no url data', e); loadDefaultExtras(); }
+  } catch(e) {
+    console.log('loadFromURL error:', e);
+    var banner = document.getElementById('loaded-banner');
+    banner.textContent = '⚠️ 資料載入失敗，請重新從報價單產生連結（錯誤：'+e.message+')';
+    banner.style.cssText = 'display:block;background:#fef2f2;border:1px solid #fca5a5;color:#dc2626;padding:.7rem .9rem;border-radius:8px;font-size:.8rem;margin-bottom:.8rem';
+    loadDefaultExtras();
+  }
 }
 
 function loadDefaultExtras() {

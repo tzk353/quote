@@ -1171,7 +1171,8 @@ function genDriverLink() {
     }
   });
 
-  var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
   // 正確計算 driver.html 的網址（相容 GitHub Pages）
   var href = window.location.href.split('?')[0];

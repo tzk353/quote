@@ -18,7 +18,7 @@
   --fm:'DM Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;font-size:14px;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;font-size:16px;line-height:1.7}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 20% 20%,rgba(201,168,76,.04) 0%,transparent 60%),
              radial-gradient(ellipse at 80% 80%,rgba(91,141,238,.04) 0%,transparent 60%)}
@@ -29,9 +29,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .logo{display:flex;align-items:center;gap:.8rem}
 .logo-icon{font-size:2rem}
 .logo-text{font-family:var(--fs);font-size:1.25rem;color:var(--gold)}
-.logo-sub{font-family:var(--fm);font-size:.62rem;letter-spacing:.22em;color:var(--muted);margin-top:2px}
+.logo-sub{font-family:var(--fm);font-size:.78rem;letter-spacing:.22em;color:var(--muted);margin-top:2px}
 .mode-tabs{display:flex;gap:.4rem}
-.mode-btn{padding:.45rem 1rem;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--dim);font-family:var(--fm);font-size:.72rem;letter-spacing:.1em;cursor:pointer;transition:all .18s}
+.mode-btn{padding:.45rem 1rem;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--dim);font-family:var(--fm);font-size:.85rem;letter-spacing:.1em;cursor:pointer;transition:all .18s}
 .mode-btn.active{background:var(--gold);border-color:var(--gold);color:#0f1117;font-weight:500}
 .mode-btn:not(.active):hover{border-color:var(--gdim);color:var(--gold)}
 
@@ -44,19 +44,19 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .section{margin-bottom:2rem}
 .sh{display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem}
 .sh::after{content:'';flex:1;height:1px;background:var(--border);margin-left:.4rem}
-.slabel{font-family:var(--fm);font-size:.68rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+.slabel{font-family:var(--fm);font-size:.82rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
 
 /* GRID */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem 1.3rem}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem 1.3rem}
 .span2{grid-column:span 2}
-@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}.span2{grid-column:span 1}.mode-btn{font-size:.65rem;padding:.4rem .7rem}}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}.span2{grid-column:span 1}.mode-btn{font-size:.8rem;padding:.4rem .7rem}}
 @media(max-width:800px){.g3{grid-template-columns:1fr 1fr}}
 
 /* FIELD */
 .field{display:flex;flex-direction:column;gap:.35rem}
-.field label{font-family:var(--fm);font-size:.67rem;letter-spacing:.12em;color:var(--dim)}
-.field input,.field select,.field textarea{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.58rem .85rem;border-radius:7px;font-family:var(--fb);font-size:.88rem;transition:border-color .15s,box-shadow .15s;width:100%}
+.field label{font-family:var(--fm);font-size:.82rem;letter-spacing:.12em;color:var(--dim)}
+.field input,.field select,.field textarea{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.58rem .85rem;border-radius:7px;font-family:var(--fb);font-size:1rem;transition:border-color .15s,box-shadow .15s;width:100%}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gglow)}
 .field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b93b0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center;padding-right:2.2rem}
 .field textarea{resize:vertical;min-height:62px}
@@ -70,7 +70,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .type-card.selected{border-color:var(--gold);background:var(--gglow)}
 .type-card .ti{font-size:2rem;margin-bottom:.4rem}
 .type-card .tn{font-size:.95rem;font-weight:600}
-.type-card .td2{font-size:.75rem;color:var(--dim);margin-top:.2rem}
+.type-card .td2{font-size:.9rem;color:var(--dim);margin-top:.2rem}
 
 /* CARS */
 .car-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
@@ -78,33 +78,33 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .car-card{border:1.5px solid var(--border);border-radius:9px;background:var(--s2);padding:.9rem 1rem 1rem;cursor:pointer;transition:all .2s;position:relative}
 .car-card:hover{border-color:var(--gdim);transform:translateY(-2px)}
 .car-card.selected{border-color:var(--gold);background:var(--gglow)}
-.cpt{position:absolute;top:.5rem;right:.5rem;background:var(--s3);border:1px solid var(--bl);border-radius:5px;padding:.15rem .45rem;font-family:var(--fm);font-size:.68rem;color:var(--gold);display:flex;align-items:center;gap:2px;transition:all .2s}
+.cpt{position:absolute;top:.5rem;right:.5rem;background:var(--s3);border:1px solid var(--bl);border-radius:5px;padding:.15rem .45rem;font-family:var(--fm);font-size:.82rem;color:var(--gold);display:flex;align-items:center;gap:2px;transition:all .2s}
 .car-card.selected .cpt{background:var(--gold);color:#0f1117;border-color:var(--gold)}
-.cpi{font-family:var(--fm);font-size:.68rem;background:transparent;border:none;color:inherit;width:52px;text-align:right;padding:0;cursor:text}
+.cpi{font-family:var(--fm);font-size:.82rem;background:transparent;border:none;color:inherit;width:52px;text-align:right;padding:0;cursor:text}
 .cpi:focus{outline:none}
 .car-icon{font-size:1.6rem;margin-bottom:.3rem}
-.car-name{font-size:.88rem;font-weight:600}
-.car-name-input{font-size:.88rem;font-weight:600;background:transparent;border:none;border-bottom:1px dashed var(--gdim);color:var(--text);width:100%;padding:0;margin-top:.15rem;font-family:var(--fb);text-align:center;cursor:text}
+.car-name{font-size:1rem;font-weight:600}
+.car-name-input{font-size:1rem;font-weight:600;background:transparent;border:none;border-bottom:1px dashed var(--gdim);color:var(--text);width:100%;padding:0;margin-top:.15rem;font-family:var(--fb);text-align:center;cursor:text}
 .car-name-input:focus{outline:none;border-bottom-color:var(--gold)}
-.car-seats{font-size:.72rem;color:var(--dim);font-family:var(--fm)}
+.car-seats{font-size:.85rem;color:var(--dim);font-family:var(--fm)}
 
 /* EXTRAS */
-.edit-hint{font-size:.72rem;color:var(--muted);font-family:var(--fm);margin-bottom:.5rem}
+.edit-hint{font-size:.85rem;color:var(--muted);font-family:var(--fm);margin-bottom:.5rem}
 .extras-list{display:flex;flex-direction:column;gap:.5rem}
 .extra-item{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--s2);cursor:pointer;transition:all .15s}
 .extra-item:hover{border-color:var(--gdim)}
 .extra-item.selected{border-color:var(--gold);background:var(--gglow)}
 .extra-left{display:flex;align-items:center;gap:.7rem}
 .extra-icon{font-size:1.1rem}
-.extra-name{font-size:.85rem;font-weight:500}
-.extra-desc{font-size:.72rem;color:var(--dim)}
+.extra-name{font-size:.98rem;font-weight:500}
+.extra-desc{font-size:.85rem;color:var(--dim)}
 .extra-price{display:flex;align-items:center;gap:3px;flex-shrink:0;margin-left:.5rem}
-.epp{font-family:var(--fm);font-size:.8rem;color:var(--gold)}
-.epi{font-family:var(--fm);font-size:.8rem;color:var(--gold);background:transparent;border:none;border-bottom:1px dashed var(--gdim);width:62px;text-align:right;padding:0 2px;cursor:text}
+.epp{font-family:var(--fm);font-size:.94rem;color:var(--gold)}
+.epi{font-family:var(--fm);font-size:.94rem;color:var(--gold);background:transparent;border:none;border-bottom:1px dashed var(--gdim);width:62px;text-align:right;padding:0 2px;cursor:text}
 .epi:focus{outline:none;border-bottom-color:var(--gold)}
 .check-box{width:19px;height:19px;border-radius:5px;flex-shrink:0;border:1.5px solid var(--bl);display:flex;align-items:center;justify-content:center;transition:all .15s}
 .extra-item.selected .check-box{background:var(--gold);border-color:var(--gold)}
-.check-box::after{content:'✓';font-size:.7rem;color:#0f1117;opacity:0;transition:opacity .1s;font-weight:700}
+.check-box::after{content:'✓';font-size:.84rem;color:#0f1117;opacity:0;transition:opacity .1s;font-weight:700}
 .extra-item.selected .check-box::after{opacity:1}
 
 /* STAMP UPLOAD */
@@ -114,15 +114,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .stamp-preview-wrap{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem}
 .stamp-preview-item{position:relative;display:inline-block}
 .stamp-preview-item img{width:90px;height:90px;object-fit:contain;border-radius:6px;border:1px solid var(--border);background:#fff;display:block}
-.stamp-remove{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
-.stamp-hint{font-size:.72rem;color:var(--muted);margin-top:.3rem}
+.stamp-remove{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.stamp-hint{font-size:.85rem;color:var(--muted);margin-top:.3rem}
 
 /* PRICE */
 .price-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.5rem}
 .price-rows{display:flex;flex-direction:column;gap:.48rem}
 .price-row{display:flex;justify-content:space-between;align-items:center}
-.price-row .label{font-size:.84rem;color:var(--dim)}
-.price-row .val{font-family:var(--fm);font-size:.85rem;color:var(--text)}
+.price-row .label{font-size:.97rem;color:var(--dim)}
+.price-row .val{font-family:var(--fm);font-size:.98rem;color:var(--text)}
 .pdiv{height:1px;background:var(--border);margin:.8rem 0}
 .ptotal{display:flex;justify-content:space-between;align-items:center}
 .ptotal .label{font-size:1rem;font-weight:600}
@@ -130,7 +130,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* BUTTONS */
 .btn-row{display:flex;gap:.7rem;margin-top:2rem;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;border:none;font-family:var(--fb);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .18s}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;border:none;font-family:var(--fb);font-size:1rem;font-weight:500;cursor:pointer;transition:all .18s}
 .btn-primary{background:var(--gold);color:#0f1117}
 .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--dim)}
@@ -143,59 +143,75 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* PRINT ACTIONS */
 .print-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.8rem}
 
+/* RECORDS */
+.rec-item{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;transition:all .15s}
+.rec-item:hover{border-color:var(--gold)}
+.rec-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem}
+.rec-num{font-family:var(--fm);font-size:.7rem;color:var(--gold)}
+.rec-date{font-family:var(--fm);font-size:.68rem;color:var(--text-muted)}
+.rec-name{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:.2rem}
+.rec-info{font-size:.78rem;color:var(--dim)}
+.rec-amount{font-family:var(--fm);font-size:.95rem;color:var(--gold);font-weight:700}
+.rec-actions{display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap}
+.rec-btn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:.25rem .7rem;font-size:.72rem;color:var(--dim);cursor:pointer;font-family:var(--fm);transition:all .15s}
+.rec-btn:hover{border-color:var(--gold);color:var(--gold)}
+.rec-btn-del{border-color:var(--red) !important;color:var(--red) !important}
+.rec-btn-del:hover{background:var(--red) !important;color:#fff !important}
+.no-records{text-align:center;color:var(--text-muted);padding:3rem 1rem;font-size:.9rem}
+
 /* ── CUSTOMER DOC ── */
 .quote-doc{background:#fff;color:#1a1a1a;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 50px rgba(0,0,0,.5);font-family:var(--fb);margin-bottom:1.8rem}
 .qh{background:#0d1020;padding:1.6rem 2rem;display:flex;justify-content:space-between;align-items:flex-start}
 .qbn{font-family:var(--fs);font-size:1.4rem;color:#c9a84c}
-.qbs{font-family:var(--fm);font-size:.62rem;letter-spacing:.22em;color:#556;margin-top:3px}
-.qmeta{text-align:right;font-family:var(--fm);font-size:.72rem;color:#777}
+.qbs{font-family:var(--fm);font-size:.78rem;letter-spacing:.22em;color:#556;margin-top:3px}
+.qmeta{text-align:right;font-family:var(--fm);font-size:.85rem;color:#777}
 .qnum{font-size:1.05rem;color:#c9a84c;display:block;margin-bottom:.3rem}
-.qbadge{display:inline-block;padding:.22rem .7rem;border-radius:20px;font-family:var(--fm);font-size:.65rem;letter-spacing:.08em;margin-top:.4rem}
+.qbadge{display:inline-block;padding:.22rem .7rem;border-radius:20px;font-family:var(--fm);font-size:.8rem;letter-spacing:.08em;margin-top:.4rem}
 .qbadge.airport{background:rgba(91,141,238,.15);color:#5b8dee;border:1px solid rgba(91,141,238,.35)}
 .qbadge.charter{background:rgba(76,175,125,.15);color:#2d8a5e;border:1px solid rgba(76,175,125,.35)}
 .qbody{padding:1.8rem 2rem}
 .qig{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
 @media(max-width:500px){.qig{grid-template-columns:1fr}}
 .qib{background:#f6f8fb;border-radius:9px;padding:.9rem 1.1rem;border:1px solid #eaecf0}
-.qit{font-family:var(--fm);font-size:.62rem;letter-spacing:.18em;color:#aaa;text-transform:uppercase;margin-bottom:.55rem}
-.qir{display:flex;gap:.5rem;margin-bottom:.3rem;font-size:.82rem}
+.qit{font-family:var(--fm);font-size:.78rem;letter-spacing:.18em;color:#aaa;text-transform:uppercase;margin-bottom:.55rem}
+.qir{display:flex;gap:.5rem;margin-bottom:.3rem;font-size:.95rem}
 .qir .k{color:#999;min-width:70px;flex-shrink:0}
 .qir .v{color:#222;font-weight:500}
-.qtbl{width:100%;border-collapse:collapse;margin-bottom:1.3rem;font-size:.84rem}
-.qtbl th{background:#f0f3f8;padding:.55rem .9rem;text-align:left;font-weight:600;color:#666;border-bottom:2px solid #e2e6ef;font-family:var(--fm);font-size:.66rem;letter-spacing:.12em}
+.qtbl{width:100%;border-collapse:collapse;margin-bottom:1.3rem;font-size:.97rem}
+.qtbl th{background:#f0f3f8;padding:.55rem .9rem;text-align:left;font-weight:600;color:#666;border-bottom:2px solid #e2e6ef;font-family:var(--fm);font-size:.8rem;letter-spacing:.12em}
 .qtbl td{padding:.55rem .9rem;border-bottom:1px solid #f0f0f0;color:#333}
 .qtbl tr:last-child td{border-bottom:none}
 .tdp{font-family:var(--fm);color:#9a6f10 !important;text-align:right !important}
 .qtrow{display:flex;justify-content:flex-end;align-items:center;gap:2rem;padding:.9rem 1.1rem;background:#fdf8ee;border-radius:9px;margin-bottom:1.2rem;border:1px solid #e8d9a8}
 .qtl{font-size:.95rem;font-weight:600;color:#444}
 .qtv{font-family:var(--fm);font-size:1.55rem;color:#b8870a;font-weight:700}
-.qnote{background:#fffbf0;border-left:3px solid #c9a84c;padding:.7rem 1rem;border-radius:0 7px 7px 0;font-size:.82rem;color:#555;margin-bottom:.9rem}
+.qnote{background:#fffbf0;border-left:3px solid #c9a84c;padding:.7rem 1rem;border-radius:0 7px 7px 0;font-size:.95rem;color:#555;margin-bottom:.9rem}
 .qstamps{display:flex;gap:1.2rem;justify-content:flex-end;align-items:flex-end;flex-wrap:wrap;padding:0}
 .qstamps:not(:empty){padding:.8rem 0 .4rem}
 .qstamps img{width:120px;height:120px;object-fit:contain;opacity:.9}
 .stamp-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center}
 .stamp-wrap img{object-fit:contain;opacity:.9}
-.stamp-label-text{font-size:.72rem;color:#888;font-family:var(--fm);letter-spacing:.08em;text-align:center;width:100%;flex-shrink:0}.qfoot{background:#f5f7fb;padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;color:#aaa;font-family:var(--fm);border-top:1px solid #e8eaf0}
+.stamp-label-text{font-size:.85rem;color:#888;font-family:var(--fm);letter-spacing:.08em;text-align:center;width:100%;flex-shrink:0}.qfoot{background:#f5f7fb;padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:#aaa;font-family:var(--fm);border-top:1px solid #e8eaf0}
 
 /* ── DRIVER DOC ── */
 .driver-doc{background:#f0f2f5;color:#1a1a2e;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 50px rgba(0,0,0,.5);font-family:var(--fb)}
 .dhdr{background:linear-gradient(135deg,#c9a84c,#a07828);padding:1.1rem 1.8rem;display:flex;justify-content:space-between;align-items:center}
 .dht{font-family:var(--fs);font-size:1.15rem;color:#0d1020;font-weight:700}
-.dhs{font-family:var(--fm);font-size:.6rem;color:rgba(13,16,32,.65);margin-top:1px;letter-spacing:.15em}
-.dhb{font-family:var(--fm);font-size:.82rem;background:rgba(13,16,32,.3);color:#0d1020;padding:.3rem .75rem;border-radius:6px;font-weight:600}
+.dhs{font-family:var(--fm);font-size:.76rem;color:rgba(13,16,32,.65);margin-top:1px;letter-spacing:.15em}
+.dhb{font-family:var(--fm);font-size:.95rem;background:rgba(13,16,32,.3);color:#0d1020;padding:.3rem .75rem;border-radius:6px;font-weight:600}
 .dbody{padding:1.5rem 1.8rem 0 1.8rem}
 .dhi{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.4rem}
 @media(max-width:480px){.dhi{grid-template-columns:1fr}}
 .dhb2{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1);border-radius:9px;padding:.9rem 1.1rem}
-.dhl{font-family:var(--fm);font-size:.6rem;letter-spacing:.18em;color:#9a6f10;text-transform:uppercase;margin-bottom:.3rem}
+.dhl{font-family:var(--fm);font-size:.76rem;letter-spacing:.18em;color:#9a6f10;text-transform:uppercase;margin-bottom:.3rem}
 .dhv{font-size:1.05rem;font-weight:700;color:#1a1a2e}
 .dhsub{font-size:.76rem;color:#666;margin-top:2px}
 .ds{margin-bottom:1.1rem}
-.dst{font-family:var(--fm);font-size:.75rem;letter-spacing:.18em;color:#9a6f10;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid rgba(0,0,0,.1)}
-.dr{display:flex;gap:.6rem;margin-bottom:.3rem;font-size:.84rem}
+.dst{font-family:var(--fm);font-size:.9rem;letter-spacing:.18em;color:#9a6f10;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid rgba(0,0,0,.1)}
+.dr{display:flex;gap:.6rem;margin-bottom:.3rem;font-size:.97rem}
 .dr .dk{color:#888;min-width:82px;flex-shrink:0}
 .dr .dv{color:#1a1a2e;font-weight:500;word-break:break-all}
-.dsp{background:rgba(154,111,16,.08);border:1px solid rgba(154,111,16,.25);border-radius:7px;padding:.7rem 1rem;font-size:.83rem;color:#7a5500;margin-top:.6rem}
+.dsp{background:rgba(154,111,16,.08);border:1px solid rgba(154,111,16,.25);border-radius:7px;padding:.7rem 1rem;font-size:.96rem;color:#7a5500;margin-top:.6rem}
 .dstamps{display:flex;gap:1.2rem;justify-content:flex-end;align-items:flex-end;flex-wrap:wrap;padding:0}
 .dstamps:not(:empty){padding:.8rem 1.8rem 1.2rem}
 .dstamps img{width:110px;height:110px;object-fit:contain;opacity:.9}
@@ -204,22 +220,22 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* ── SIGNATURE ── */
 .sig-section{border-top:2px dashed #e0e4ef;padding:1.1rem 0 .4rem;margin-top:.8rem}
-.sig-title{font-family:var(--fm);font-size:.68rem;letter-spacing:.18em;color:#888;text-transform:uppercase;margin-bottom:.8rem}
+.sig-title{font-family:var(--fm);font-size:.82rem;letter-spacing:.18em;color:#888;text-transform:uppercase;margin-bottom:.8rem}
 .sig-row{display:flex;gap:1.2rem;align-items:flex-start;flex-wrap:wrap}
 .sig-box{flex:1;min-width:200px}
 #sig-canvas{border:1.5px dashed #bbb;border-radius:8px;background:#f8f9fc;cursor:crosshair;display:block;width:100%;touch-action:none}
 .sig-actions{display:flex;align-items:center;gap:.6rem;margin-top:.5rem;flex-wrap:wrap}
-.sig-btn{border-radius:6px;padding:.28rem .75rem;font-size:.75rem;cursor:pointer;font-family:var(--fm);border:1px solid #ddd;transition:all .15s}
+.sig-btn{border-radius:6px;padding:.28rem .75rem;font-size:.9rem;cursor:pointer;font-family:var(--fm);border:1px solid #ddd;transition:all .15s}
 .sig-btn-clear{background:#fff;color:#888}.sig-btn-clear:hover{border-color:#aaa;color:#444}
 .sig-btn-save{background:#2c4a3e;color:#fff;border-color:#2c4a3e}.sig-btn-save:hover{background:#1e3329}
-.sig-hint{font-size:.7rem;color:#ccc;font-family:var(--fm);margin-left:auto}
+.sig-hint{font-size:.84rem;color:#ccc;font-family:var(--fm);margin-left:auto}
 .sig-meta{display:flex;flex-direction:column;gap:.85rem;min-width:150px;flex:0 0 160px}
 .sig-meta-item{display:flex;flex-direction:column;gap:.3rem}
-.sig-meta-label{font-size:.72rem;color:#999;font-family:var(--fm)}
-.sig-date-input{border:none;border-bottom:1.5px solid #ccc;background:transparent;font-size:.85rem;color:#333;padding:.2rem 0;font-family:var(--fb);width:100%}
+.sig-meta-label{font-size:.85rem;color:#999;font-family:var(--fm)}
+.sig-date-input{border:none;border-bottom:1.5px solid #ccc;background:transparent;font-size:.98rem;color:#333;padding:.2rem 0;font-family:var(--fb);width:100%}
 .sig-date-input:focus{outline:none;border-bottom-color:#888}
 .sig-meta-line{height:1px;background:#ddd;width:100%;margin-top:.4rem}
-.sig-confirm-text{font-size:.72rem;color:#aaa;line-height:1.5;margin-top:.3rem}
+.sig-confirm-text{font-size:.85rem;color:#aaa;line-height:1.5;margin-top:.3rem}
 @media print{
   .sig-btn-clear,.sig-hint{display:none !important}
   .sig-btn-save{display:none !important}
@@ -251,6 +267,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="mode-tabs">
       <button class="mode-btn active" onclick="showPanel('form')">&#128221; 填寫報價</button>
       <button class="mode-btn" onclick="showPanel('preview')">&#128065; 預覽列印</button>
+      <button class="mode-btn" onclick="showPanel('records')">&#128196; 歷史訂單</button>
+    </div>
+  </div>
+
+  <!-- RECORDS PANEL -->
+  <div id="records-panel" class="panel">
+    <div style="max-width:1000px;margin:0 auto;padding:1.5rem 1.2rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem">
+        <div style="font-size:1rem;font-weight:600;color:var(--text)">&#128196; 歷史報價紀錄</div>
+        <button onclick="clearAllRecords()" style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:.35rem .9rem;font-size:.78rem;cursor:pointer;font-family:var(--fb)">&#128465; 清除全部</button>
+      </div>
+      <div id="records-list-main"></div>
     </div>
   </div>
 
@@ -375,7 +403,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
           <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-company').click()">
             <input type="file" id="inp-stamp-company" accept="image/*" onchange="loadStamp('company',this)">
             <div style="font-size:1.5rem">&#127970;</div>
-            <div style="font-size:.82rem;color:var(--dim);margin-top:.3rem">公司章</div>
+            <div style="font-size:.95rem;color:var(--dim);margin-top:.3rem">公司章</div>
             <div class="stamp-hint">PNG / JPG 透明背景佳</div>
           </div>
           <div class="stamp-preview-wrap" id="stamp-company-preview"></div>
@@ -384,7 +412,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
           <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-person').click()">
             <input type="file" id="inp-stamp-person" accept="image/*" onchange="loadStamp('person',this)">
             <div style="font-size:1.5rem">&#128100;</div>
-            <div style="font-size:.82rem;color:var(--dim);margin-top:.3rem">負責人章</div>
+            <div style="font-size:.95rem;color:var(--dim);margin-top:.3rem">負責人章</div>
             <div class="stamp-hint">PNG / JPG 透明背景佳</div>
           </div>
           <div class="stamp-preview-wrap" id="stamp-person-preview"></div>
@@ -393,7 +421,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
           <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-tax').click()">
             <input type="file" id="inp-stamp-tax" accept="image/*" onchange="loadStamp('tax',this)">
             <div style="font-size:1.5rem">&#128196;</div>
-            <div style="font-size:.82rem;color:var(--dim);margin-top:.3rem">統編章</div>
+            <div style="font-size:.95rem;color:var(--dim);margin-top:.3rem">統編章</div>
             <div class="stamp-hint">PNG / JPG 透明背景佳</div>
           </div>
           <div class="stamp-preview-wrap" id="stamp-tax-preview"></div>
@@ -407,6 +435,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div class="field"><label>司機姓名</label><input id="f-driver" type="text" placeholder="陳大明"></div>
         <div class="field"><label>司機電話</label><input id="f-dtel" type="text" placeholder="0900-111-222"></div>
         <div class="field"><label>車牌號碼</label><input id="f-plate" type="text" placeholder="ABC-1234"></div>
+        <div class="field"><label>車款型號</label><input id="f-carmodel" type="text" placeholder="Toyota Alphard"></div>
         <div class="field"><label>付款方式</label>
           <select id="f-pay">
             <option value="現金付款">現金付款</option>
@@ -416,7 +445,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
             <option value="月結">月結</option>
           </select>
         </div>
-        <div class="field span2"><label>備註 / 特殊需求</label><textarea id="f-note" placeholder="例：大行李箱 2 個、需嬰兒座椅 1 個…"></textarea></div>
+        <div class="field"><label>備註 / 特殊需求</label><textarea id="f-note" placeholder="例：大行李箱 2 個、需嬰兒座椅 1 個…"></textarea></div>
       </div>
     </div>
 
@@ -449,6 +478,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       <button class="btn btn-blue" onclick="printOnly('driver')">&#128663; 司機版列印</button>
       <button class="btn btn-red" onclick="savePDF('customer')">&#128190; 客戶版 PDF</button>
       <button class="btn btn-purple" onclick="savePDF('driver')">&#128190; 司機版 PDF</button>
+      <button class="btn" style="background:#0f6e3a;color:#fff" onclick="genDriverLink()">&#128279; 產生司機連結</button>
+    </div>
+    <div id="driver-link-box" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:.9rem 1rem;margin-bottom:1rem">
+      <div style="font-size:.72rem;color:#166534;font-family:'DM Mono',monospace;margin-bottom:.6rem;letter-spacing:.1em">&#128279; 司機端連結</div>
+      <a id="driver-link-url" href="#" target="_blank" style="display:block;font-size:.78rem;color:#15803d;word-break:break-all;margin-bottom:.7rem;line-height:1.6;background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:.5rem .7rem;text-decoration:underline"></a>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button onclick="copyShortened()" id="copy-driver-btn" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:7px;padding:.55rem .8rem;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Noto Sans TC',sans-serif">&#128203; 複製連結傳給司機</button>
+      </div>
+      <div style="font-size:.7rem;color:#4ade80;margin-top:.5rem">點連結可開啟預覽・按鈕可複製後貼到 LINE</div>
     </div>
 
     <!-- 客戶版 -->
@@ -479,10 +517,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         </div>
         <div class="qib" id="p-driver-box" style="margin-bottom:1rem;display:none">
           <div class="qit">司機資訊</div>
-          <div class="qig" style="margin-bottom:0">
-            <div class="qir"><span class="k">司機姓名</span><span class="v" id="p-driver-name">—</span></div>
-            <div class="qir"><span class="k">車牌號碼</span><span class="v" id="p-driver-plate">—</span></div>
-          </div>
+          <div class="qir"><span class="k">司機姓名</span><span class="v" id="p-driver-name">—</span></div>
+          <div class="qir"><span class="k">司機電話</span><span class="v" id="p-driver-tel">—</span></div>
+          <div class="qir"><span class="k">車款型號</span><span class="v" id="p-driver-carmodel">—</span></div>
+          <div class="qir"><span class="k">車牌號碼</span><span class="v" id="p-driver-plate">—</span></div>
         </div>
         <table class="qtbl">
           <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">金額（NT$）</th></tr></thead>
@@ -531,10 +569,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
           <div id="d-trip-rows"></div>
         </div>
         <div class="ds">
-          <div class="dst">&#128665; 車輛資訊</div>
-          <div class="dr"><span class="dk">車型</span><span class="dv" id="d-car">—</span></div>
-          <div class="dr"><span class="dk">車牌號碼</span><span class="dv" id="d-plate">—</span></div>
+          <div class="dst">&#128665; 車輛 / 司機資訊</div>
           <div class="dr"><span class="dk">司機姓名</span><span class="dv" id="d-driver">—</span></div>
+          <div class="dr"><span class="dk">司機電話</span><span class="dv" id="d-dtel">—</span></div>
+          <div class="dr"><span class="dk">車型</span><span class="dv" id="d-car">—</span></div>
+          <div class="dr"><span class="dk">車款型號</span><span class="dv" id="d-carmodel">—</span></div>
+          <div class="dr"><span class="dk">車牌號碼</span><span class="dv" id="d-plate">—</span></div>
         </div>
         <div id="d-extras-section" style="display:none" class="ds">
           <div class="dst">&#11088; 加購項目</div>
@@ -687,6 +727,9 @@ window.onload = function() {
   document.getElementById('f-date').value = today;
   document.getElementById('f-charter-date').value = today;
   initSig();
+  loadStampsFromStorage();
+  var companyEl = document.getElementById('f-company');
+  if (companyEl) companyEl.addEventListener('input', saveStampsToStorage);
 };
 
 function gv(id) {
@@ -847,6 +890,7 @@ function loadStamp(type, input) {
       + '<img src="' + e.target.result + '">'
       + '<button class="stamp-remove" onclick="removeStamp(\'' + type + '\')">&#10005;</button>'
       + '</div>';
+    saveStampsToStorage();
   };
   reader.readAsDataURL(file);
 }
@@ -855,6 +899,43 @@ function removeStamp(type) {
   stamps[type] = null;
   document.getElementById('stamp-' + type + '-preview').innerHTML = '';
   document.getElementById('inp-stamp-' + type).value = '';
+  saveStampsToStorage();
+}
+
+function saveStampsToStorage() {
+  try {
+    var company = document.getElementById('f-company') ? document.getElementById('f-company').value : '';
+    localStorage.setItem('quoteStamps', JSON.stringify({
+      company: stamps.company,
+      person: stamps.person,
+      tax: stamps.tax,
+      companyName: company
+    }));
+  } catch(e) { console.log('storage error', e); }
+}
+
+function loadStampsFromStorage() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('quoteStamps') || '{}');
+    if (saved.company) {
+      stamps.company = saved.company;
+      document.getElementById('stamp-company-preview').innerHTML =
+        '<div class="stamp-preview-item"><img src="' + saved.company + '"><button class="stamp-remove" onclick="removeStamp(\'company\')">&#10005;</button></div>';
+    }
+    if (saved.person) {
+      stamps.person = saved.person;
+      document.getElementById('stamp-person-preview').innerHTML =
+        '<div class="stamp-preview-item"><img src="' + saved.person + '"><button class="stamp-remove" onclick="removeStamp(\'person\')">&#10005;</button></div>';
+    }
+    if (saved.tax) {
+      stamps.tax = saved.tax;
+      document.getElementById('stamp-tax-preview').innerHTML =
+        '<div class="stamp-preview-item"><img src="' + saved.tax + '"><button class="stamp-remove" onclick="removeStamp(\'tax\')">&#10005;</button></div>';
+    }
+    if (saved.companyName && document.getElementById('f-company') && !document.getElementById('f-company').value) {
+      document.getElementById('f-company').value = saved.companyName;
+    }
+  } catch(e) { console.log('load stamps error', e); }
 }
 
 function renderStamps() {
@@ -972,31 +1053,201 @@ function generatePreview() {
   sv('p-pay', gv('f-pay')); sv('p-tel', gv('f-tel')); sv('p-line', gv('f-line'));
   sv('d-car', car.name + ' (' + car.seats + ')');
   sv('d-plate', gv('f-plate')); sv('d-driver', gv('f-driver')); sv('d-pay', gv('f-pay'));
+  sv('d-dtel', gv('f-dtel')); sv('d-carmodel', gv('f-carmodel'));
 
   // 司機資訊顯示在客戶版
   var driverName = gv('f-driver');
   var driverPlate = gv('f-plate');
+  var driverTel = gv('f-dtel');
+  var driverCarmodel = gv('f-carmodel');
   var driverBox = document.getElementById('p-driver-box');
-  if (driverName || driverPlate) {
+  if (driverName || driverPlate || driverTel || driverCarmodel) {
     driverBox.style.display = '';
     sv('p-driver-name', driverName);
     sv('p-driver-plate', driverPlate);
+    sv('p-driver-tel', driverTel);
+    sv('p-driver-carmodel', driverCarmodel);
   } else {
     driverBox.style.display = 'none';
   }
 
   renderStamps();
+
+  // 儲存歷史紀錄
+  saveQuoteRecord({
+    num: num, date: now,
+    name: gv('f-name'),
+    type: state.type === 'airport' ? '機場接送' : '包車服務',
+    car: car.name, total: total, pay: gv('f-pay')
+  });
+
   showPanel('preview');
 }
+
+function genDriverLink() {
+  // 取報價單上已顯示的資料（從預覽頁面讀取）
+  var carName = document.getElementById('d-car') ? document.getElementById('d-car').textContent : '';
+  var base = 0;
+  if (state.car) {
+    var car = null;
+    for (var i = 0; i < CARS.length; i++) { if (CARS[i].id === state.car) { car = CARS[i]; break; } }
+    if (car) base = state.type === 'airport' ? car.baseA : car.baseC;
+  }
+
+  var raw = {
+    n:  gv('f-name'),
+    p:  gv('f-pax'),
+    c:  carName.replace(/\s*\(.*\)/, '').trim() || gv('f-car'),
+    pl: gv('f-plate'),
+    dr: gv('f-driver'),
+    dt: state.type === 'airport' ? gv('f-date') : gv('f-charter-date'),
+    tp: state.type === 'airport' ? (document.getElementById('f-direction').value === '__custom__' ? getDirection() : gv('f-direction')) : getCharterType(),
+    fr: state.type === 'airport' ? gv('f-airport') : gv('f-charter-from'),
+    to: gv('f-dest') || gv('f-charter-route'),
+    py: gv('f-pay'),
+    b:  base,
+    no: gv('f-note'),
+    id: document.getElementById('p-quote-num') ? document.getElementById('p-quote-num').textContent : ''
+  };
+
+  var data = {};
+  Object.keys(raw).forEach(function(k) {
+    if (raw[k] !== '' && raw[k] !== null && raw[k] !== undefined && raw[k] !== 0) {
+      data[k] = raw[k];
+    }
+  });
+
+  var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+
+  // 正確計算 driver.html 的網址（相容 GitHub Pages）
+  var href = window.location.href.split('?')[0];
+  var driverBase = href.replace(/[^/]*$/, '') + 'driver.html';
+  var url = driverBase + '?d=' + encoded;
+
+  document.getElementById('driver-link-box').style.display = '';
+  var linkEl = document.getElementById('driver-link-url');
+  linkEl.href = url;
+  linkEl.textContent = url;
+}
+
+function copyDriverLink() {
+  var linkEl = document.getElementById('driver-link-url');
+  var url = linkEl.href || linkEl.textContent;
+  copyToClipboard(url, '連結已複製！');
+}
+
+function copyShortAgain() {
+  var url = document.getElementById('short-url-text').textContent;
+  copyToClipboard(url, '短網址已複製！');
+}
+
+function copyToClipboard(text, msg) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() { alert(msg); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert(msg);
+  }
+}
+
+function copyShortened() {
+  var linkEl = document.getElementById('driver-link-url');
+  var url = linkEl.href || linkEl.textContent;
+  if (!url || url === '#') { alert('請先按「產生司機連結」'); return; }
+  var btn = document.getElementById('copy-driver-btn');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      btn.textContent = '✅ 已複製！';
+      setTimeout(function() { btn.innerHTML = '&#128203; 複製連結傳給司機'; }, 2000);
+    }).catch(function() { fallbackCopy(url, btn); });
+  } else {
+    fallbackCopy(url, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try {
+    document.execCommand('copy');
+    if (btn) { btn.textContent = '✅ 已複製！'; setTimeout(function() { btn.innerHTML = '&#128203; 複製連結傳給司機'; }, 2000); }
+    else alert('連結已複製！');
+  } catch(e) {
+    alert('請長按下方連結手動複製：\n\n' + text);
+  }
+  document.body.removeChild(ta);
+}
+
+function shortenLink() {}
 
 function showPanel(name) {
   document.getElementById('form-panel').classList.toggle('active', name === 'form');
   document.getElementById('preview-panel').classList.toggle('active', name === 'preview');
+  document.getElementById('records-panel').classList.toggle('active', name === 'records');
   var btns = document.querySelectorAll('.mode-btn');
+  var map = ['form','preview','records'];
   for (var i = 0; i < btns.length; i++) {
-    btns[i].classList.toggle('active', i === (name === 'form' ? 0 : 1));
+    btns[i].classList.toggle('active', map[i] === name);
   }
+  if (name === 'records') renderRecordsMain();
   window.scrollTo(0, 0);
+}
+
+// ── RECORDS ──
+function getQuoteRecords() {
+  try { return JSON.parse(localStorage.getItem('quoteRecords') || '[]'); } catch(e) { return []; }
+}
+
+function saveQuoteRecord(data) {
+  try {
+    var records = getQuoteRecords();
+    records.unshift(data);
+    if (records.length > 200) records = records.slice(0, 200);
+    localStorage.setItem('quoteRecords', JSON.stringify(records));
+  } catch(e) { console.log('storage error', e); }
+}
+
+function deleteQuoteRecord(i) {
+  var records = getQuoteRecords();
+  records.splice(i, 1);
+  localStorage.setItem('quoteRecords', JSON.stringify(records));
+  renderRecordsMain();
+}
+
+function clearAllRecords() {
+  if (!confirm('確定清除所有歷史紀錄？')) return;
+  localStorage.removeItem('quoteRecords');
+  renderRecordsMain();
+}
+
+function renderRecordsMain() {
+  var records = getQuoteRecords();
+  var el = document.getElementById('records-list-main');
+  if (!records.length) {
+    el.innerHTML = '<div class="no-records">尚無歷史報價紀錄</div>';
+    return;
+  }
+  el.innerHTML = records.map(function(r, i) {
+    return '<div class="rec-item">'
+      + '<div class="rec-top"><span class="rec-num">' + r.num + '</span><span class="rec-date">' + r.date + '</span></div>'
+      + '<div class="rec-name">' + (r.name || '—') + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center">'
+      + '<div class="rec-info">' + (r.type || '—') + '・' + (r.car || '—') + '</div>'
+      + '<div class="rec-amount">' + (r.total > 0 ? 'NT$ ' + r.total.toLocaleString() : '—') + '</div>'
+      + '</div>'
+      + '<div class="rec-actions">'
+      + '<button class="rec-btn" onclick="deleteQuoteRecord(' + i + ')">&#128465; 刪除</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
 }
 
 function resetForm() {
@@ -1005,7 +1256,7 @@ function resetForm() {
              'f-flight','f-dest','f-time','f-pickup-time','f-dropoff-time',
              'f-charter-time','f-charter-pickup','f-charter-dropoff',
              'f-charter-from','f-charter-route','f-driver','f-dtel',
-             'f-plate','f-note','f-charter-custom','f-custom-route'];
+             'f-plate','f-carmodel','f-note','f-charter-custom','f-custom-route'];
   ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
   ['f-direction','f-airport','f-charter-type','f-pay'].forEach(function(id) {
     var el = document.getElementById(id); if (el) el.selectedIndex = 0;

@@ -374,12 +374,12 @@ function loadFromURL() {
       }
     }
 
-    // 載入附加服務（從 localStorage 讀取）
+    // 附加服務：優先從 localStorage 讀取（同裝置），否則用預設值
     var savedExtras = null;
     try { savedExtras = JSON.parse(localStorage.getItem('quoteExtras')||'null'); } catch(ex){}
     if (savedExtras && savedExtras.length) {
-      EXTRAS = savedExtras.map(function(e) {
-        return { id:e.id, icon:'', name:e.name, desc:e.desc, price:e.price, on:false };
+      EXTRAS = savedExtras.map(function(e, i) {
+        return { id:'ex'+i, icon:'', name:e[0]||'', desc:e[1]||'', price:parseInt(e[2])||0, on:false };
       });
     } else {
       loadDefaultExtras();

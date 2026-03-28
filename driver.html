@@ -344,7 +344,11 @@ function loadFromURL() {
     var p = new URLSearchParams(window.location.search);
     var d = p.get('d');
     if (!d) return;
-    var data = JSON.parse(decodeURIComponent(escape(atob(d))));
+    // 正確解碼中文
+    var jsonStr = decodeURIComponent(Array.prototype.map.call(atob(d), function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    var data = JSON.parse(jsonStr);
     orderData = data;
 
     function sv(id, v) { var el=document.getElementById(id); if(el) el.textContent=v||'—'; }

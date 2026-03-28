@@ -408,7 +408,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
 
     <div class="section">
-      <div class="sh"><span>&#128274;</span><span class="slabel">公司章 / 負責人章 / 統編章</span></div>
+      <div class="sh"><span>&#128274;</span><span class="slabel">公司章 / 負責人章 / 統編章</span><button onclick="syncStampsToGist()" id="sync-btn" style="margin-left:.5rem;padding:.28rem .8rem;background:#1d4ed8;color:#fff;border:none;border-radius:6px;font-size:.78rem;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.08em">☁️ 同步到雲端</button><span id="sync-status" style="font-size:.72rem;color:var(--dim);margin-left:.5rem"></span></div>
       <div class="g3">
         <div>
           <div class="stamp-upload-area" onclick="document.getElementById('inp-stamp-company').click()">
@@ -490,6 +490,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       <button class="btn btn-red" onclick="savePDF('customer')">&#128190; 客戶版 PDF</button>
       <button class="btn btn-purple" onclick="savePDF('driver')">&#128190; 司機版 PDF</button>
       <button class="btn" style="background:#0f6e3a;color:#fff" onclick="genDriverLink()">&#128279; 產生司機連結</button>
+      <label style="display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--dim);cursor:pointer;margin-left:.3rem">
+        <input type="checkbox" id="chk-with-stamp" style="width:16px;height:16px;cursor:pointer"> 附上章
+      </label>
     </div>
     <div id="driver-link-box" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:.9rem 1rem;margin-bottom:1rem">
       <div style="font-size:.72rem;color:#166534;font-family:'DM Mono',monospace;margin-bottom:.6rem;letter-spacing:.1em">&#128279; 司機端連結</div>
@@ -926,6 +929,48 @@ function getCharterType() {
   return sel.value;
 }
 
+// ── Gist 章同步 ──────────────────────────────────────────
+var GIST_FILE = 'stamps.json';
+
+function getGistToken() {
+  var t = localStorage.getItem('gistToken') || '';
+  if (!t) {
+    t = prompt('請輸入 GitHub Token（只需輸入一次，之後自動記住）：\n\n到 github.com/settings/tokens 取得，勾選 gist 權限。');
+    if (t) localStorage.setItem('gistToken', t.trim());
+  }
+  return (t || '').trim();
+}
+
+function getGistId() {
+  return localStorage.getItem('stampGistId') || '';
+}
+
+function syncStampsToGist() {
+  var btn = document.getElementById('sync-btn');
+  var st  = document.getElementById('sync-status');
+  var token = getGistToken();
+  if (!token) { st.textContent = '❌ 未輸入 Token'; return; }
+  var company = document.getElementById('f-company') ? document.getElementById('f-company').value.trim() : '';
+  var payload = { company: stamps.company||'', person: stamps.person||'', tax: stamps.tax||'', companyName: company };
+  var body = JSON.stringify({ description:'印章資料', public:false, files:{ 'stamps.json':{ content: JSON.stringify(payload) } } });
+  btn.disabled = true; st.textContent = '同步中…';
+  var gistId = getGistId();
+  var url    = gistId ? 'https://api.github.com/gists/' + gistId : 'https://api.github.com/gists';
+  var method = gistId ? 'PATCH' : 'POST';
+  fetch(url, { method: method, headers:{ 'Authorization':'token '+token, 'Content-Type':'application/json' }, body: body })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.id) {
+        localStorage.setItem('stampGistId', d.id);
+        st.textContent = '✅ 同步成功！';
+      } else {
+        st.textContent = '❌ 失敗：' + (d.message||'未知錯誤');
+      }
+      btn.disabled = false;
+    })
+    .catch(function(e){ st.textContent = '❌ 網路錯誤'; btn.disabled = false; });
+}
+
 function loadStamp(type, input) {
   var file = input.files[0];
   if (!file) return;
@@ -1147,6 +1192,13 @@ function genDriverLink() {
     ));
   } catch(e2) {}
 
+  var withStamp = document.getElementById('chk-with-stamp') && document.getElementById('chk-with-stamp').checked;
+  var gistId = withStamp ? getGistId() : '';
+  if (withStamp && !gistId) {
+    alert('請先上傳章並按「☁️ 同步到雲端」，才能附上章。');
+    return;
+  }
+
   var raw = {
     n:  gv('f-name'),
     p:  gv('f-pax'),
@@ -1161,7 +1213,8 @@ function genDriverLink() {
     b:  base,
     no: gv('f-note'),
     id: document.getElementById('p-quote-num') ? document.getElementById('p-quote-num').textContent : '',
-    co: gv('f-company')
+    co: gv('f-company'),
+    gi: gistId   // Gist ID，有才帶
   };
 
   var data = {};
